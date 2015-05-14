@@ -10,21 +10,11 @@ try {
       logger.log('error', String(err));
       return;
     }
-
-    action.process(
-      function(err) {
-        if(err) {
-          logger.log('error', String(err));
-          return;
-        }
-        // dispose of the action is important since it may still
-        // reference a db connection that is open and because we're
-        // in a command line environnement, the process would not stop
-        (function(myaction) {
-          myaction.dispose();
-        }(action));
-      }
-    );
+    action.on('error', function(err) {
+      logger.log('error', String(err));
+    });
+    
+    action.process();
   });
 
 
