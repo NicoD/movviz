@@ -12,11 +12,14 @@ describe('Command', function() {
 
 
   it('should build an import action', function(done) {
-    routerFactory.create(getArgv('nodejs movviz--cmd import -v -s \'/tmp/test.csv\''))
+    routerFactory.create(getArgv('nodejs movviz --cmd import -v -s \'/tmp/test.csv\''))
       .get(function(err, obj) {
         if(err) {
           throw err;
         }
+
+        // force the event to close resources
+        obj.emit('process-done');
         done();
       });
 

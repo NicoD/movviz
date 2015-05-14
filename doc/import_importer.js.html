@@ -40,6 +40,10 @@
 						</li>
 						
 						<li>
+							<a href="module-import_lister.html">import/lister</a>
+						</li>
+						
+						<li>
 							<a href="module-repository_movie.html">repository/movie</a>
 						</li>
 						
@@ -75,6 +79,10 @@
 						
 						<li>
 							<a href="module-import_importer-Importer.html">import/importer~Importer</a>
+						</li>
+						
+						<li>
+							<a href="module-import_lister-Lister.html">import/lister~Lister</a>
 						</li>
 						
 						<li>
@@ -227,7 +235,7 @@ var fs = require('fs'),
 
         store(filePath, function(total) {
           logger.log('info', 'total stored: ' + total);
-          self.emit('import-done');
+          self.emit('process-done');
         });
       });
     };

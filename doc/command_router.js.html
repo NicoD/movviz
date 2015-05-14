@@ -40,6 +40,10 @@
 						</li>
 						
 						<li>
+							<a href="module-import_lister.html">import/lister</a>
+						</li>
+						
+						<li>
 							<a href="module-repository_movie.html">repository/movie</a>
 						</li>
 						
@@ -75,6 +79,10 @@
 						
 						<li>
 							<a href="module-import_importer-Importer.html">import/importer~Importer</a>
+						</li>
+						
+						<li>
+							<a href="module-import_lister-Lister.html">import/lister~Lister</a>
 						</li>
 						
 						<li>
@@ -133,14 +141,17 @@ var CommandRouter = function(argv) {
    * @param {Object} action object
    */
 
-  var program = new Command();
+  var program = new Command(),
+    self = this;
 
   // command line form description
   program.version('1.0.0')
     .description('import a list')
-    .option('-c, --cmd [cmd]', 'Command', /^(import)$/i, 'import')
+    .option('-c, --cmd [cmd]', 'Command', /^(import|list)$/i)
     .option('-s, --source [source]', 'source (url or path)')
-    .option('-v, --verbose', 'verbose mode');
+    .option('-v, --verbose', 'verbose mode')
+
+  .option('-l, --lines [value]', 'nombre de ligne', parseInt);
 
   // command line help callback
   program.on('--help', function() {
@@ -176,35 +187,76 @@ var CommandRouter = function(argv) {
     logger.level = program.verbose ? 'info' : 'error';
     logger.log('info', 'running command %s', program.cmd);
 
-    // create the action
-    switch(program.cmd) {
-      case "import":
-        if(!program.source) {
-          return onGet(new this.CommandError("source not set"));
-        }
-        MongoClient.connect('mongodb://localhost:27017/movviz', function(err, db) {
-          if(err) {
-            return onGet(err);
+
+    // @TODO, for the moment, the db is always mandatory
+    MongoClient.connect('mongodb://localhost:27017/movviz', function(err, db) {
+      if(err) {
+        return onGet(err);
+      }
+
+
+      logger.log('info', 'connection to database');
+      var controller,
+        movieRepository = require('../repository/movie').create(db);
+
+
+      // create the action
+      switch(program.cmd) {
+        case "import":
+          if(!program.source) {
+            db.close();
+            return onGet(new self.CommandError("source not set"));
           }
+          controller = require('../import/importer').create(
+            require('../import/fileReader').create(program.source),
+            movieRepository
+          );
+          break;
 
-          var movieRepository = require('../repository/movie').create(db),
-            importer = require('../import/importer').create(
-              require('../import/fileReader').create(program.source),
-              movieRepository
-            );
-          importer.on('import-done', function() {
-            movieRepository.count(function(err, count) {
-              logger.log('info', 'total stored: ' + count);
-              db.close();
-            });
-          });
-          onGet(null, importer);
-        });
-        break;
 
-      default:
-        return onGet(new this.CommandError("unknown command '%s'", program.cmd));
-    }
+        case "list":
+          var lines = program.lines || 0;
+          controller = require('../list/lister').create(movieRepository);
+
+          // create a proxy of the process command to display the results
+          controller._process = controller.process;
+          controller.process = function() {
+
+            var iterator = controller._process(),
+              movie,
+              iterated = 0,
+              iterate = function(err, obj) {
+                if(!obj) {
+                  return;
+                }
+
+                console.log(obj.title + ' - ' + obj.rating);
+                iterated++;
+                if(lines &amp;&amp; iterated >= lines) {
+                  process.stdout.write("\nPress any key to continue...");
+                  process.stdin.once('data', function() {
+                    process.stdout.write("\n");
+                    iterated = 0;
+                    iterator.next(iterate);
+                  });
+                } else {
+                  iterator.next(iterate);
+                }
+              };
+            iterator.next(iterate);
+          };
+          break;
+
+
+        default:
+          //db.close();
+          return onGet(new self.CommandError("unknown command '%s'", program.cmd));
+      }
+      controller.on('process-done', function() {
+        db.close();
+      });
+      onGet(null, controller);
+    });
   };
 };
 

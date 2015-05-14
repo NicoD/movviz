@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Modules</title>
+	<title>DocStrap Source: list/lister.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -104,110 +104,88 @@
 	<div class="row-fluid">
 
 		
-		<div class="span8">
-			
+			<div class="span12">
+				
 				<div id="main">
 					
 
 
-	<h1 class="page-title">Modules</h1>
+		<h1 class="page-title">Source: list/lister.js</h1>
+    
 <section>
+	<article>
+		<pre
+			class="sunlight-highlight-javascript linenums">/**
+ * data reader module
+ * @module import/lister
+ */
+'use strict';
 
-<header>
-    <h2>
-    
-    </h2>
-    
-</header>
+var events = require('events'),
+  util = require('util'),
+  logger = require('../utils/logger').Logger,
 
-<article>
-    <div class="container-overview">
-    
 
-    
-        
-
-        
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
+  /**
+   * List is used to ... to list the movies
+   * @class
+   * @param {module:entity/Repository} repository
+   */
+  Lister = function(repository) {
 
 
 
-	
+    /**
+     * iterator class used to be able to call a callback
+     * at the end of the iteration.
+     * kind of proxy of the mongoDb cursor
+     * /!\ the iteration is asynchronous :'(
+     * @param {Object} mongoDb cursor
+     * @param {callback} call for each results
+     */
+    var ResultIterator = function(dbCursor, onEnd) {
 
-	
+      this.next = function(callback) {
+        dbCursor.nextObject(function(err, object) {
+          if(object === null) {
+            onEnd();
+          }
+          callback(err, object);
+        });
+      };
+    };
 
-	
+    var self = this;
+    events.EventEmitter.call(this);
 
-	
-</dl>
+    /**
+     * process the import
+     */
+    this.process = function() {
+      self.emit('process-start');
+      logger.log('info', 'listing movies');
+      return new ResultIterator(
+        repository.find(),
+        function() {
+          self.emit('process-done');
+        });
+    };
+  };
 
 
-        
-    
-    </div>
+util.inherits(Lister, events.EventEmitter);
 
-    
 
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-command_router-CommandRouter.html">CommandRouter</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-command_router-CommandRouter_CommandError.html">CommandError</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-import_fileReader-FileReader.html">FileReader</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-import_importer-Importer.html">Importer</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-import_lister-Lister.html">Lister</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-repository_movie-Repository.html">Repository</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-utils_logger-Logger.html">Logger</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
+/** 
+ * Lister factory
+ * @param {module:entity/MovieRepository} repository
+ */
+module.exports.create = function(repository) {
+  return new Lister(repository);
+};</pre>
+	</article>
 </section>
+
 
 
 
@@ -231,10 +209,6 @@
 				</footer>
 			</div>
 
-			
-			<div class="span3">
-				<div id="toc"></div>
-			</div>
 			
 			<br clear="both">
 		</div>
