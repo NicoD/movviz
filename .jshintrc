@@ -1,0 +1,15 @@
+{
+  "plusplus"      : false,
+  "globalstrict"  : true,
+  "globals" : {
+    "require" : true,
+    "console" : true,
+    "exports" : true,
+    "module"  : true,
+
+    "describe": true,
+    "it"     : true,
+    "process": true
+  }
+}
+

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>DocStrap Source: command/router.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cosmo.css">
+
+</head>
+
+<body>
+<div class="container-fluid">
+	<div class="navbar navbar-fixed-top navbar-inverse">
+		<div class="navbar-inner">
+			<a class="brand" href="index.html">DocStrap</a>
+			<ul class="nav">
+				
+				<li class="dropdown">
+					<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="module-command_router.html">command/router</a>
+						</li>
+						
+						<li>
+							<a href="module-import_fileReader.html">import/fileReader</a>
+						</li>
+						
+						<li>
+							<a href="module-import_importer.html">import/importer</a>
+						</li>
+						
+						<li>
+							<a href="module-repository_movie.html">repository/movie</a>
+						</li>
+						
+						<li>
+							<a href="module-utils_file.html">utils/file</a>
+						</li>
+						
+						<li>
+							<a href="module-utils_logger.html">utils/logger</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
+				<li class="dropdown">
+					<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="module-command_router-CommandRouter.html">command/router~CommandRouter</a>
+						</li>
+						
+						<li>
+							<a href="module-command_router-CommandRouter_CommandError.html">command/router~CommandRouter#CommandError</a>
+						</li>
+						
+						<li>
+							<a href="module-import_fileReader-FileReader.html">import/fileReader~FileReader</a>
+						</li>
+						
+						<li>
+							<a href="module-import_importer-Importer.html">import/importer~Importer</a>
+						</li>
+						
+						<li>
+							<a href="module-repository_movie-Repository.html">repository/movie~Repository</a>
+						</li>
+						
+						<li>
+							<a href="module-utils_logger-Logger.html">utils/logger~Logger</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
+			</ul>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+
+		
+			<div class="span12">
+				
+				<div id="main">
+					
+
+
+		<h1 class="page-title">Source: command/router.js</h1>
+    
+<section>
+	<article>
+		<pre
+			class="sunlight-highlight-javascript linenums">/**
+ * Routing from args module
+ * @module command/router
+ */
+'use strict';
+
+
+var MongoClient = require('mongodb').MongoClient,
+  Command = require('commander').Command,
+  logger = require('../utils/logger').Logger;
+
+
+/**
+ * CommandRouter is used to build an action according to the command line args
+ * @class
+ * @param {array} argv - Args of the process (process.argv)
+ */
+var CommandRouter = function(argv) {
+
+  /**
+   * Callback used when getting a action
+   * @callback module:command/router~CommandRouter~onGet
+   * @param {string} error
+   * @param {Object} action object
+   */
+
+  var program = new Command();
+
+  // command line form description
+  program.version('1.0.0')
+    .description('import a list')
+    .option('-c, --cmd [cmd]', 'Command', /^(import)$/i, 'import')
+    .option('-s, --source [source]', 'source (url or path)')
+    .option('-v, --verbose', 'verbose mode');
+
+  // command line help callback
+  program.on('--help', function() {
+    console.log('  Examples:');
+    console.log('');
+    console.log('    $ node movies.js --cmd=import --source=/tmp/file.csv');
+    console.log('');
+  });
+
+  program.parse(argv);
+
+  /**
+   * CommandRouter specific error
+   * @class
+   */
+  this.CommandError = function(message) {
+    this.message = message;
+    logger.log('error', message);
+  };
+  this.CommandError.prototype = Object.create(Error.prototype);
+  this.CommandError.prototype.toString = function() {
+    return 'EXCEPTION> ' + this.message + "\n" + program.helpInformation();
+  };
+
+
+  /**
+   * Do the routing and generate the acion coreesponding to the given args.
+   * @param {module:command/router~CommandRouter~onGet} onGet
+   */
+  this.get = function(onGet) {
+
+    // initialize the verbose mode
+    logger.level = program.verbose ? 'info' : 'error';
+    logger.log('info', 'running command %s', program.cmd);
+
+    // create the action
+    switch(program.cmd) {
+      case "import":
+        if(!program.source) {
+          return onGet(new this.CommandError("source not set"));
+        }
+        MongoClient.connect('mongodb://localhost:27017/movviz', function(err, db) {
+          if(err) {
+            return onGet(err);
+          }
+
+          var movieRepository = require('../repository/movie').create(db);
+          return onGet(
+            null,
+            require('../import/importer').create(
+              require('../import/fileReader').create(program.source),
+              movieRepository,
+              function() {
+                movieRepository.count(function(err, count) {
+                  logger.log('info', 'total stored: ' + count);
+                  db.close();
+                });
+              }
+            )
+          );
+        });
+        break;
+
+      default:
+        return onGet(new this.CommandError("unknown command '%s'", program.cmd));
+    }
+  };
+};
+
+
+/** 
+ * CommandRouter factory
+ * @return {module:command/router~CommandRouter}
+ * @param {array} argv - Args of the process (process.argv)
+ */
+module.exports.create = function(argv) {
+  return new CommandRouter(argv);
+};</pre>
+	</article>
+</section>
+
+
+
+
+
+				</div>
+
+				<div class="clearfix"></div>
+				<footer>
+					
+					
+		<span class="copyright">
+		DocStrap Copyright © 2012-2014 The contributors to the JSDoc3 and DocStrap projects.
+		</span>
+					<br />
+					
+		<span class="jsdoc-message">
+		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a>
+		on Mon May 11th 2015 using the <a
+			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		</span>
+				</footer>
+			</div>
+
+			
+			<br clear="both">
+		</div>
+
+	</div>
+	<!--<script src="scripts/sunlight.js"></script>-->
+	<script src="scripts/docstrap.lib.js"></script>
+	<script src="scripts/bootstrap-dropdown.js"></script>
+	<script src="scripts/toc.js"></script>
+
+	<script>
+		$( function () {
+			$( "[id*='$']" ).each( function () {
+				var $this = $( this );
+
+				$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+			} );
+
+			$( "#toc" ).toc( {
+				anchorName  : function ( i, heading, prefix ) {
+					return $( heading ).attr( "id" ) || ( prefix + i );
+				},
+				selectors   : "h1,h2,h3,h4",
+				showAndHide : false,
+				scrollTo    : "100px"
+			} );
+
+			$( "#toc>ul" ).addClass( "nav nav-pills nav-stacked" );
+			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+			$( '.dropdown-toggle' ).dropdown();
+//			$( ".tutorial-section pre, .readme-section pre" ).addClass( "sunlight-highlight-javascript" ).addClass( "linenums" );
+
+			$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+				var $this = $( this );
+
+				var example = $this.find( "code" );
+				exampleText = example.html();
+				var lang = /{@lang (.*?)}/.exec( exampleText );
+				if ( lang && lang[1] ) {
+					exampleText = exampleText.replace( lang[0], "" );
+					example.html( exampleText );
+					lang = lang[1];
+				} else {
+					lang = "javascript";
+				}
+
+				if ( lang ) {
+
+					$this
+						.addClass( "sunlight-highlight-" + lang )
+						.addClass( "linenums" )
+						.html( example.html() );
+
+				}
+			} );
+
+			Sunlight.highlightAll( {
+				lineNumbers : true,
+				showMenu : true,
+				enableDoclinks : true
+			} );
+		} );
+	 </script>
+
+
+
+	<!--Navigation and Symbol Display-->
+	
+
+
+	<!--Google Analytics-->
+	
+
+</body>
+</html>
