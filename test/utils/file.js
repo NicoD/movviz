@@ -24,7 +24,11 @@ describe('FileUtils', function() {
         if(err) {
           throw err;
         }
-        fs.exists(file, function(exists) { if(exists) { done(); }});
+        fs.exists(file, function(exists) {
+          if(exists) {
+            done();
+          }
+        });
       });
     });
   });

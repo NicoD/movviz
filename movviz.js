@@ -13,7 +13,7 @@ try {
     action.on('error', function(err) {
       logger.log('error', String(err));
     });
-    
+
     action.process();
   });
 

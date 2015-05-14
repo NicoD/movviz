@@ -187,20 +187,18 @@ var CommandRouter = function(argv) {
             return onGet(err);
           }
 
-          var movieRepository = require('../repository/movie').create(db);
-          return onGet(
-            null,
-            require('../import/importer').create(
+          var movieRepository = require('../repository/movie').create(db),
+            importer = require('../import/importer').create(
               require('../import/fileReader').create(program.source),
-              movieRepository,
-              function() {
-                movieRepository.count(function(err, count) {
-                  logger.log('info', 'total stored: ' + count);
-                  db.close();
-                });
-              }
-            )
-          );
+              movieRepository
+            );
+          importer.on('import-done', function() {
+            movieRepository.count(function(err, count) {
+              logger.log('info', 'total stored: ' + count);
+              db.close();
+            });
+          });
+          onGet(null, importer);
         });
         break;
 
