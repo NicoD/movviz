@@ -20,9 +20,10 @@ try {
 
 } catch(e) {
 
+  
   // CommandError also flush the command usage
   // this separator is used to get the error trace still lisible
-  if(e instanceof router.CommandError) {
+  if(router && (e instanceof router.CommandError)) {
     console.log("\n--------------------------------");
   }
   console.log(String(e));
