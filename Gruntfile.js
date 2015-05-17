@@ -4,7 +4,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     jshint: {
-      files: ['movviz.js', 'lib/**/*.js', 'test/**/*.js'],
+      files: ['movviz.js', 'lib/**/*.js', 'test/**/*.js',' asset/javascript/**/*.js'],
       options: {
         jshintrc: '.jshintrc' 
       }
@@ -30,7 +30,6 @@ module.exports = function(grunt) {
     },
 
 
-
     less: {
       development: {
         options: {
@@ -38,7 +37,19 @@ module.exports = function(grunt) {
           optimization: 2
         },
         files: {
-          "public/css/main.css": "assets/less/main.less"
+          'public/css/main.css': 'assets/less/main.less'
+        }
+      }
+    },
+
+    uglify: {
+      options: {
+        mangle: false,
+        sourceMap: true
+      },
+      my_target: {
+        files: {
+          'public/scripts/movviz.min.js': ['assets/javascript/main.js']
         }
       }
     },
@@ -58,6 +69,10 @@ module.exports = function(grunt) {
           nospawn: true
         }
       },
+      jsClient: {
+        files: ['assets/javascript/**/*.js'],
+        tasks: ['uglify']
+      },
       js: {
         files: ['<%= jshint.files %>'],
         tasks: ['jshint']
@@ -73,9 +88,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
 
   grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
   grunt.registerTask('default', ['mochaTest', 'jsbeautifier', 'jshint', 'jsdoc', 'less']);
 
-  grunt.registerTask('web', ['less']);
+  grunt.registerTask('web', ['uglify', 'less']);
 
 };
