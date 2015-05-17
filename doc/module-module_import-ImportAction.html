@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Module: utils/file</title>
+	<title>DocStrap Class: ImportAction</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -130,12 +130,14 @@
 					
 
 
-	<h1 class="page-title">Module: utils/file</h1>
+	<h1 class="page-title">Class: ImportAction</h1>
 <section>
 
 <header>
     <h2>
-    utils/file
+        <span class="ancestors"><a href="module-module_import.html">module/import</a>~</span>
+    
+    ImportAction
     </h2>
     
 </header>
@@ -146,84 +148,97 @@
 
     
         
-            <div class="description"><p>File utils</p></div>
-        
-
-        
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="utils_file.js.html">utils/file.js</a>,
-				 <a href="utils_file.js.html#sunlight-1-line-1">line 1</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-        
+<dt>
+    <h4 class="name" id="ImportAction"><span class="type-signature"></span>new ImportAction<span class="signature">(filePath, repository)</span><span class="type-signature"></span></h4>
     
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        <dl>
-            
-<dt class="name" id=".downloadFile">
-    <h4><span class="type-signature">&lt;static> </span>downloadFile<span class="type-signature"></span></h4>
-
     
 </dt>
 <dd>
+    
     
     <div class="description">
-        <p>download a file identified by a url into the given target</p>
+        <p>import movie from a source into a repository</p>
     </div>
     
 
     
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
 
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>filePath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>path of the file</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>repository</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:entity/MovieRepository</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
     
 <dl class="details">
 	
@@ -251,8 +266,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="utils_file.js.html">utils/file.js</a>,
-				 <a href="utils_file.js.html#sunlight-1-line-78">line 78</a>
+				<a href="action_import.js.html">action/import.js</a>,
+				 <a href="action_import.js.html#sunlight-1-line-20">line 20</a>
 			</li>
 		</ul>
 	</dd>
@@ -265,273 +280,33 @@
 	
 </dl>
 
+    
+    
 
+    
+
+    
+    
+    
+    
+    
+    
     
 </dd>
 
-        
-            
-<dt class="name" id=".getTempPath">
-    <h4><span class="type-signature">&lt;static> </span>getTempPath<span class="type-signature"></span></h4>
-
     
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>generate a determinist temp path from a url</p>
     </div>
+
+    
+
+    
+
     
 
     
 
     
-<dl class="details">
-	
 
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="utils_file.js.html">utils/file.js</a>,
-				 <a href="utils_file.js.html#sunlight-1-line-46">line 46</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<dt class="name" id="~key">
-    <h4><span class="type-signature">&lt;inner> </span>key<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="utils_file.js.html">utils/file.js</a>,
-				 <a href="utils_file.js.html#sunlight-1-line-11">line 11</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<dt class="name" id="~TYPE_FILE">
-    <h4><span class="type-signature">&lt;inner, constant> </span>TYPE_FILE<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="utils_file.js.html">utils/file.js</a>,
-				 <a href="utils_file.js.html#sunlight-1-line-91">line 91</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<dt class="name" id="~TYPE_URL">
-    <h4><span class="type-signature">&lt;inner, constant> </span>TYPE_URL<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="utils_file.js.html">utils/file.js</a>,
-				 <a href="utils_file.js.html#sunlight-1-line-85">line 85</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        </dl>
     
 
     
@@ -540,7 +315,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id=".prepare"><span class="type-signature">&lt;static> </span>prepare<span class="signature">(onPrepared)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="process"><span class="type-signature"></span>process<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -548,9 +323,7 @@
     
     
     <div class="description">
-        <p>prepare a file that might come from the web
-to be able to be read locally
-aram {string} uri</p>
+        <p>process the import</p>
     </div>
     
 
@@ -558,55 +331,6 @@ aram {string} uri</p>
     
     
     
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>onPrepared</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-file.html#~onPrepared">module:file~onPrepared</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
     
     
     
@@ -636,8 +360,8 @@ aram {string} uri</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="utils_file.js.html">utils/file.js</a>,
-				 <a href="utils_file.js.html#sunlight-1-line-108">line 108</a>
+				<a href="action_import.js.html">action/import.js</a>,
+				 <a href="action_import.js.html#sunlight-1-line-111">line 111</a>
 			</li>
 		</ul>
 	</dd>
@@ -667,7 +391,7 @@ aram {string} uri</p>
         
             
 <dt>
-    <h4 class="name" id="~downloadFile"><span class="type-signature">&lt;inner> </span>downloadFile<span class="signature">(url, target)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~cleanRawResult"><span class="type-signature">&lt;inner> </span>cleanRawResult<span class="signature">(row)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
     
 </dt>
@@ -675,7 +399,7 @@ aram {string} uri</p>
     
     
     <div class="description">
-        <p>download a file identified by a url into the given target</p>
+        <p>clean the raw result of the csv file</p>
     </div>
     
 
@@ -709,13 +433,13 @@ aram {string} uri</p>
 
         <tr>
             
-                <td class="name"><code>url</code></td>
+                <td class="name"><code>row</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">array</span>
 
 
             
@@ -725,53 +449,7 @@ aram {string} uri</p>
 
             
 
-            <td class="description last"><p>of the file</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>target</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>file path</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code></code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-utils_file.html#~onDownload">module:utils/file~onDownload</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
+            <td class="description last"><p>result</p></td>
         </tr>
 
 	
@@ -807,133 +485,8 @@ aram {string} uri</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="utils_file.js.html">utils/file.js</a>,
-				 <a href="utils_file.js.html#sunlight-1-line-55">line 55</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="~getTempPath"><span class="type-signature">&lt;inner> </span>getTempPath<span class="signature">(url)</span><span class="type-signature"> &rarr; {string}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>generate a determinist temp path from a url</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>url</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>url of the resource</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="utils_file.js.html">utils/file.js</a>,
-				 <a href="utils_file.js.html#sunlight-1-line-33">line 33</a>
+				<a href="action_import.js.html">action/import.js</a>,
+				 <a href="action_import.js.html#sunlight-1-line-38">line 38</a>
 			</li>
 		</ul>
 	</dd>
@@ -960,7 +513,7 @@ aram {string} uri</p>
     
             
 <div class="param-desc">
-    <p>temp path name</p>
+    <p>cleaned result</p>
 </div>
 
 
@@ -971,7 +524,7 @@ aram {string} uri</p>
 	</dt>
 	<dd>
 		
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
 	</dd>
@@ -983,16 +536,10 @@ aram {string} uri</p>
     
 </dd>
 
-        </dl>
-    
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        <dl>
-                
+        
+            
 <dt>
-    <h4 class="name" id="~onDownload"><span class="type-signature"></span>onDownload<span class="signature">(error, file)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~store"><span class="type-signature">&lt;inner> </span>store<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1000,7 +547,7 @@ aram {string} uri</p>
     
     
     <div class="description">
-        <p>Download successfull callback</p>
+        <p>parse and store the content of the filePath into the repository</p>
     </div>
     
 
@@ -1015,8 +562,6 @@ aram {string} uri</p>
 <table class="params table table-striped">
     <thead>
 	<tr>
-		
-		<th>Name</th>
 		
 
 		<th>Type</th>
@@ -1034,13 +579,11 @@ aram {string} uri</p>
 
         <tr>
             
-                <td class="name"><code>error</code></td>
-            
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><a href="module-action_import-ImportAction.html#~onStored">module:action/import~ImportAction~onStored</a></span>
 
 
             
@@ -1051,29 +594,6 @@ aram {string} uri</p>
             
 
             <td class="description last"></td>
-        </tr>
-
-	
-
-        <tr>
-            
-                <td class="name"><code>file</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>written</p></td>
         </tr>
 
 	
@@ -1109,8 +629,8 @@ aram {string} uri</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="utils_file.js.html">utils/file.js</a>,
-				 <a href="utils_file.js.html#sunlight-1-line-19">line 19</a>
+				<a href="action_import.js.html">action/import.js</a>,
+				 <a href="action_import.js.html#sunlight-1-line-69">line 69</a>
 			</li>
 		</ul>
 	</dd>
@@ -1137,7 +657,9 @@ aram {string} uri</p>
     
 </dd>
 
-            </dl>
+        </dl>
+    
+
     
 
     
