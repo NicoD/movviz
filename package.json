@@ -7,7 +7,9 @@
     "winston": ">= ~1.0",
     "fast-csv": ">= ~0.6.0",
     "mongodb": "*",
-    "sprintf-js": "~1.0.2"
+    "sprintf-js": "~1.0.2",
+    "express": "~4.12.3",
+    "jade": "~1.9.2"
   },
   "engine": "node ~0.10",
   "devDependencies": {
@@ -17,6 +19,8 @@
     "grunt-contrib-watch": "~0.6.1",
     "grunt-jsbeautifier": "0.2.7",
     "mocha": "~2.2.4",
-    "grunt-mocha-test": "~0.12.7"
+    "grunt-mocha-test": "~0.12.7",
+    "grunt-contrib-concat": "~0.5.1",
+    "grunt-contrib-less": "~1.0.1"
   }
 }

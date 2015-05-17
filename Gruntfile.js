@@ -17,6 +17,7 @@ module.exports = function(grunt) {
       }
     },
 
+    // server only
     jsdoc: {
       dist: {
         src: ['lib/**/*.js'],
@@ -27,14 +28,40 @@ module.exports = function(grunt) {
         }
       }
     },
+
+
+
+    less: {
+      development: {
+        options: {
+          compress: true,
+          optimization: 2
+        },
+        files: {
+          "public/css/main.css": "assets/less/main.less"
+        }
+      }
+    },
+
     mochaTest: {
       test: {
         src: ['test/**/*.js'],
       }
     },
+
+
     watch: {
-      files: ['<%= jshint.files %>'],
-      tasks: ['jshint']
+      styles: {
+        files: ['assets/less/**/*.less'],
+        tasks: ['less'],
+        options: {
+          nospawn: true
+        }
+      },
+      js: {
+        files: ['<%= jshint.files %>'],
+        tasks: ['jshint']
+      }
     }
   });
 
@@ -45,6 +72,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-jsbeautifier');
   grunt.loadNpmTasks('grunt-mocha-test');
 
-  grunt.registerTask('default', ['mochaTest', 'jsbeautifier', 'jshint', 'jsdoc']);
+  grunt.loadNpmTasks('grunt-contrib-less');
+
+  grunt.registerTask('default', ['mochaTest', 'jsbeautifier', 'jshint', 'jsdoc', 'less']);
+
+  grunt.registerTask('web', ['less']);
 
 };
