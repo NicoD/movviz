@@ -142,12 +142,9 @@
 'use strict';
 
 
-var MongoClient = require('mongodb').MongoClient,
+var mydb = require('../../mydb'),
   Command = require('commander').Command,
-  events = require('events'),
   util = require('util'),
-  readline = require('readline'),
-  fileUtil = require('../utils/file'),
   actionBuilderFactory = require('./builderFactory'),
   logger = require('../utils/logger').Logger;
 
@@ -166,9 +163,7 @@ var CommandRouter = function(argv) {
    * @param {Object} action object
    */
 
-  var program = new Command(),
-    self = this;
-  events.EventEmitter.call(this);
+  var program = new Command();
 
   // command line form description
   program.version('1.0.0')
@@ -201,13 +196,11 @@ var CommandRouter = function(argv) {
     logger.log('info', 'running command %s', program.cmd);
 
 
-    // @TODO, for the moment, the db is always mandatory
-    MongoClient.connect('mongodb://localhost:27017/movviz', function(err, db) {
+    mydb.connect(function(err, db) {
       if(err) {
         return onGet(err);
       }
       logger.log('info', 'connection to database');
-
 
       try {
         actionBuilderFactory.create(program.cmd)
@@ -231,7 +224,6 @@ var CommandRouter = function(argv) {
   };
 };
 
-util.inherits(CommandRouter, events.EventEmitter);
 
 /** 
  * CommandRouter factory
