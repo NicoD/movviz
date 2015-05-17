@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Classes</title>
+	<title>DocStrap Source: action/install.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -120,116 +120,67 @@
 	<div class="row-fluid">
 
 		
-		<div class="span8">
-			
+			<div class="span12">
+				
 				<div id="main">
 					
 
 
-	<h1 class="page-title">Classes</h1>
+		<h1 class="page-title">Source: action/install.js</h1>
+    
 <section>
+	<article>
+		<pre
+			class="sunlight-highlight-javascript linenums">/**
+ * installation module
+ * @module action/install
+ */
+'use strict';
 
-<header>
-    <h2>
-    
-    </h2>
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-
-    
-        
-
-        
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
+var events = require('events'),
+  util = require('util'),
+  logger = require('../utils/logger').Logger,
 
 
+  /**
+   * Installation class
+   * @class
+   * @param {module:entity/MovieRepository} repository
+   */
+  InstallAction = function(repository) {
 
-	
+    var self = this;
+    events.EventEmitter.call(this);
 
-	
+    /**
+     * process the action
+     */
+    this.process = function() {
+      logger.log('info', 'start installation');
+      repository.install(function(err) {
+        if(err)
+          return self.emit('error', err);
 
-	
+        logger.log('info', 'installation done');
+        self.emit('process-done');
+      });
+    };
+  };
 
-	
-</dl>
+
+util.inherits(InstallAction, events.EventEmitter);
 
 
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-action_install-InstallAction.html">InstallAction</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-command_router-CommandRouter.html">CommandRouter</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-command_router-CommandRouter_CommandError.html">CommandError</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-import_fileReader-FileReader.html">FileReader</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-import_importer-Importer.html">Importer</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-import_lister-Lister.html">Lister</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-repository_movie_criteria-Repository.html">Repository</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-repository_movie-Repository.html">Repository</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-utils_logger-Logger.html">Logger</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
+/** 
+ * InstallAction factory
+ * @param {module:entity/MovieRepository} repository
+ */
+module.exports.create = function(repository) {
+  return new InstallAction(repository);
+};</pre>
+	</article>
 </section>
+
 
 
 
@@ -253,10 +204,6 @@
 				</footer>
 			</div>
 
-			
-			<div class="span3">
-				<div id="toc"></div>
-			</div>
 			
 			<br clear="both">
 		</div>

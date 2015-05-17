@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Classes</title>
+	<title>DocStrap Source: repository/movie/criteria.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -120,116 +120,89 @@
 	<div class="row-fluid">
 
 		
-		<div class="span8">
-			
+			<div class="span12">
+				
 				<div id="main">
 					
 
 
-	<h1 class="page-title">Classes</h1>
+		<h1 class="page-title">Source: repository/movie/criteria.js</h1>
+    
 <section>
+	<article>
+		<pre
+			class="sunlight-highlight-javascript linenums">/**
+ * movie repository criteria
+ * @module repository/movie/criteria
+ */
+'use strict';
 
-<header>
-    <h2>
-    
-    </h2>
-    
-</header>
+var vsprintf = require("sprintf-js").vsprintf;
 
-<article>
-    <div class="container-overview">
-    
+var criterias = {
 
-    
-        
-
-        
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
+  'search': {
+    "line": "function() {" +
+      " if(!%2$s) {" +
+      "   return this.title.indexOf(\"%1$s\") != -1;" +
+      " } else { " +
+      "   return this.title.toLowerCase().indexOf(\"%1$s\".toLowerCase()) != -1;" +
+      " }" +
+      "}",
+    "args": [
+      {
+        "name": "pattern"
+      },
+      {
+        "name": "case sensitive (Y/N)",
+        "transform": function(str) {
+          return str === "Y";
+        }
+      }
+    ]
+  }
+};
 
 
-	
-
-	
-
-	
-
-	
-</dl>
+var getWhere = function(args) {
+  return vsprintf(this.line, args);
+};
 
 
-        
-    
-    </div>
+/**
+ * CriteraRepository
+ * centralize criteria access
+ *
+ * @class
+ */
+var Repository = function() {
 
-    
 
-    
+  /**
+   * return the criteria corresponding to the given name
+   * @param {String} name
+   * @return object
+   */
+  this.findByName = function(name) {
+    var ret = Object.create(criterias[name]);
+    if(ret) {
+      ret.getWhere = getWhere;
+    }
+    return ret;
+  };
+};
 
-    
 
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-action_install-InstallAction.html">InstallAction</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-command_router-CommandRouter.html">CommandRouter</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-command_router-CommandRouter_CommandError.html">CommandError</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-import_fileReader-FileReader.html">FileReader</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-import_importer-Importer.html">Importer</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-import_lister-Lister.html">Lister</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-repository_movie_criteria-Repository.html">Repository</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-repository_movie-Repository.html">Repository</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-utils_logger-Logger.html">Logger</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
+/**
+ * Criteria repository factory
+ * @return {module:respository/movie/criteria~Repository}
+ */
+module.exports.create = function() {
+  return new Repository();
+};</pre>
+	</article>
 </section>
+
 
 
 
@@ -253,10 +226,6 @@
 				</footer>
 			</div>
 
-			
-			<div class="span3">
-				<div id="toc"></div>
-			</div>
 			
 			<br clear="both">
 		</div>

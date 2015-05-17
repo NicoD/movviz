@@ -28,6 +28,10 @@
 					<ul class="dropdown-menu ">
 						
 						<li>
+							<a href="module-action_install.html">action/install</a>
+						</li>
+						
+						<li>
 							<a href="module-command_router.html">command/router</a>
 						</li>
 						
@@ -45,6 +49,10 @@
 						
 						<li>
 							<a href="module-repository_movie.html">repository/movie</a>
+						</li>
+						
+						<li>
+							<a href="module-repository_movie_criteria.html">repository/movie/criteria</a>
 						</li>
 						
 						<li>
@@ -66,6 +74,10 @@
 					<ul class="dropdown-menu ">
 						
 						<li>
+							<a href="module-action_install-InstallAction.html">action/install~InstallAction</a>
+						</li>
+						
+						<li>
 							<a href="module-command_router-CommandRouter.html">command/router~CommandRouter</a>
 						</li>
 						
@@ -83,6 +95,10 @@
 						
 						<li>
 							<a href="module-import_lister-Lister.html">import/lister~Lister</a>
+						</li>
+						
+						<li>
+							<a href="module-repository_movie_criteria-Repository.html">repository/movie/criteria~Repository</a>
 						</li>
 						
 						<li>
@@ -321,7 +337,7 @@ centralize data access</p>
             <td class="type">
             
                 
-<span class="param-type">onCountCb</span>
+<span class="param-type">onCount</span>
 
 
             
@@ -368,7 +384,7 @@ centralize data access</p>
 		<ul class="dummy">
 			<li>
 				<a href="repository_movie.js.html">repository/movie.js</a>,
-				 <a href="repository_movie.js.html#sunlight-1-line-31">line 31</a>
+				 <a href="repository_movie.js.html#sunlight-1-line-94">line 94</a>
 			</li>
 		</ul>
 	</dd>
@@ -398,7 +414,7 @@ centralize data access</p>
         
             
 <dt>
-    <h4 class="name" id="find"><span class="type-signature"></span>find<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="find"><span class="type-signature"></span>find<span class="signature">(criteria)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -407,6 +423,165 @@ centralize data access</p>
     
     <div class="description">
         <p>return all the results</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>criteria</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>search criteria</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="repository_movie.js.html">repository/movie.js</a>,
+				 <a href="repository_movie.js.html#sunlight-1-line-103">line 103</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>cursor</p>
+</div>
+
+
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="install"><span class="type-signature"></span>install<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>prepare the storage
+doc example:
+ {
+   _id:ObjectId(&quot;507f1f77bcf86cd799439011&quot;)
+   seenAt: new Date('Jun 15, 2015'),
+   genre: [ &quot;Drama&quot;, &quot;Horror&quot;],
+   directors: [
+     {
+       name: &quot;Steven Spielberg&quot;
+     },
+     {
+       name: &quot;George Lucas&quot;
+     }
+   ],
+   rating: 7.5,
+   runtime: 140,
+   year: 1998,
+   imdb: {
+     id: &quot;tt3297330&quot;,
+     url: &quot;http://www.imdb.com/title/tt3297330/&quot;,
+     rating: 6.3,
+     updateDatedAt: new Date('Jul 03, 2015')
+   }
+ }</p>
     </div>
     
 
@@ -444,7 +619,7 @@ centralize data access</p>
 		<ul class="dummy">
 			<li>
 				<a href="repository_movie.js.html">repository/movie.js</a>,
-				 <a href="repository_movie.js.html#sunlight-1-line-39">line 39</a>
+				 <a href="repository_movie.js.html#sunlight-1-line-44">line 44</a>
 			</li>
 		</ul>
 	</dd>
@@ -467,17 +642,6 @@ centralize data access</p>
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>cursor</p>
-</div>
-
-
-
-
-        
     
     
 </dd>
@@ -556,7 +720,7 @@ centralize data access</p>
             <td class="type">
             
                 
-<span class="param-type">onStoredCb</span>
+<span class="param-type">onStored</span>
 
 
             
@@ -603,7 +767,7 @@ centralize data access</p>
 		<ul class="dummy">
 			<li>
 				<a href="repository_movie.js.html">repository/movie.js</a>,
-				 <a href="repository_movie.js.html#sunlight-1-line-23">line 23</a>
+				 <a href="repository_movie.js.html#sunlight-1-line-86">line 86</a>
 			</li>
 		</ul>
 	</dd>
@@ -656,7 +820,7 @@ centralize data access</p>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a>
-		on Thu May 14th 2015 using the <a
+		on Sun May 17th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

@@ -28,6 +28,10 @@
 					<ul class="dropdown-menu ">
 						
 						<li>
+							<a href="module-action_install.html">action/install</a>
+						</li>
+						
+						<li>
 							<a href="module-command_router.html">command/router</a>
 						</li>
 						
@@ -45,6 +49,10 @@
 						
 						<li>
 							<a href="module-repository_movie.html">repository/movie</a>
+						</li>
+						
+						<li>
+							<a href="module-repository_movie_criteria.html">repository/movie/criteria</a>
 						</li>
 						
 						<li>
@@ -66,6 +74,10 @@
 					<ul class="dropdown-menu ">
 						
 						<li>
+							<a href="module-action_install-InstallAction.html">action/install~InstallAction</a>
+						</li>
+						
+						<li>
 							<a href="module-command_router-CommandRouter.html">command/router~CommandRouter</a>
 						</li>
 						
@@ -83,6 +95,10 @@
 						
 						<li>
 							<a href="module-import_lister-Lister.html">import/lister~Lister</a>
+						</li>
+						
+						<li>
+							<a href="module-repository_movie_criteria-Repository.html">repository/movie/criteria~Repository</a>
 						</li>
 						
 						<li>
@@ -124,6 +140,9 @@
 
 var MongoClient = require('mongodb').MongoClient,
   Command = require('commander').Command,
+  events = require('events'),
+  util = require('util'),
+  readline = require('readline'),
   logger = require('../utils/logger').Logger;
 
 
@@ -143,15 +162,16 @@ var CommandRouter = function(argv) {
 
   var program = new Command(),
     self = this;
+  events.EventEmitter.call(this);
 
   // command line form description
   program.version('1.0.0')
     .description('import a list')
-    .option('-c, --cmd [cmd]', 'Command', /^(import|list)$/i)
-    .option('-s, --source [source]', 'source (url or path)')
+    .option('-c, --cmd [cmd]', 'Command', /^(import|list|install)$/i)
+    .option('-s, --source [source]', 'source (url or path) [import]}')
     .option('-v, --verbose', 'verbose mode')
-
-  .option('-l, --lines [value]', 'nombre de ligne', parseInt);
+    .option('-l, --lines [value]', 'Line number to display per page [list]', parseInt)
+    .option('--criteria [value]', 'search criteria [list]');
 
   // command line help callback
   program.on('--help', function() {
@@ -194,6 +214,19 @@ var CommandRouter = function(argv) {
         return onGet(err);
       }
 
+      // a proxy of the callback given to support the close of resources
+      var onGetProxy = function(err, controller) {
+        if(!err) {
+          controller.on('process-done', function() {
+            db.close();
+          });
+          controller.on('error', function() {
+            db.close();
+          });
+        }
+        onGet(err, controller);
+      };
+
 
       logger.log('info', 'connection to database');
       var controller,
@@ -204,62 +237,105 @@ var CommandRouter = function(argv) {
       switch(program.cmd) {
         case "import":
           if(!program.source) {
-            db.close();
-            return onGet(new self.CommandError("source not set"));
+            return onGetProxy(new self.CommandError("source not set"));
           }
           controller = require('../import/importer').create(
             require('../import/fileReader').create(program.source),
             movieRepository
           );
+          onGetProxy(null, controller);
           break;
 
 
         case "list":
-          var lines = program.lines || 0;
-          controller = require('../list/lister').create(movieRepository);
 
-          // create a proxy of the process command to display the results
-          controller._process = controller.process;
-          controller.process = function() {
+          var rargs = readline.createInterface(process.stdin, process.stdout),
+            lines = program.lines || 0,
+            criteria;
 
-            var iterator = controller._process(),
-              movie,
-              iterated = 0,
-              iterate = function(err, obj) {
-                if(!obj) {
-                  return;
-                }
+          self.once('criteria-ready', function(criteria) {
 
-                console.log(obj.title + ' - ' + obj.rating);
-                iterated++;
-                if(lines &amp;&amp; iterated >= lines) {
-                  process.stdout.write("\nPress any key to continue...");
-                  process.stdin.once('data', function() {
-                    process.stdout.write("\n");
-                    iterated = 0;
+            controller = require('../list/lister').create(criteria, movieRepository);
+
+            // create a proxy of the process command to display the results
+            controller._process = controller.process;
+            controller.process = function() {
+
+              var iterator = controller._process(),
+                movie,
+                iterated = 0,
+                iterate = function(err, obj) {
+                  if(!obj) {
+                    return;
+                  }
+
+                  console.log(obj.title + ' - ' + obj.rating);
+                  iterated++;
+                  if(lines &amp;&amp; iterated >= lines) {
+                    process.stdout.write("\nPress any key to continue...");
+                    process.stdin.on('data', function() {
+                      process.stdout.write("\n");
+                      iterated = 0;
+                      iterator.next(iterate);
+                    });
+                  } else {
                     iterator.next(iterate);
-                  });
-                } else {
-                  iterator.next(iterate);
-                }
+                  }
+                };
+              iterator.next(iterate);
+            };
+
+            controller.on('process-done', function() {
+              rargs.close();
+            });
+            onGetProxy(null, controller);
+          });
+
+
+          if(program.criteria) {
+            var definition = require('../repository/movie/criteria').create()
+              .findByName(program.criteria);
+            if(definition &amp;&amp; definition.args) {
+
+              var args = [],
+                definitionArgs = definition.args.slice(0); // clone
+              var readNextArg = function() {
+                var argDef = definitionArgs.shift();
+                rargs.question(argDef.name + ' : ', function(value) {
+                  args.push(argDef.transform ? argDef.transform(value) : value);
+                  if(definitionArgs.length > 0) {
+                    readNextArg();
+                  } else {
+                    var criteria = {
+                      "$where": definition.getWhere(args)
+                    };
+                    self.emit('criteria-ready', criteria);
+                  }
+                });
               };
-            iterator.next(iterate);
-          };
+              readNextArg();
+            } else {
+              self.emit('criteria-ready');
+            }
+          } else {
+            self.emit('criteria-ready');
+          }
           break;
 
+        case 'install':
+          controller = require('../action/install').create(movieRepository);
+          onGetProxy(null, controller);
+
+          break;
 
         default:
-          //db.close();
-          return onGet(new self.CommandError("unknown command '%s'", program.cmd));
+          return onGetProxy(new self.CommandError("unknown command '%s'", program.cmd));
       }
-      controller.on('process-done', function() {
-        db.close();
-      });
-      onGet(null, controller);
     });
   };
 };
 
+util.inherits(CommandRouter, events.EventEmitter);
 
 /** 
  * CommandRouter factory
@@ -289,7 +365,7 @@ module.exports.create = function(argv) {
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a>
-		on Thu May 14th 2015 using the <a
+		on Sun May 17th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
