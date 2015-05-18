@@ -1,10 +1,13 @@
 'use strict';
 
 var assert = require('assert'),
-  routerFactory = require('../../lib/command/router');
+  routerFactory = require('../../lib/command/router'),
+  db = require('../../lib/db');
 
 
 describe('Command', function() {
+
+  db.setConfigFileName(__dirname + '/../../config/database.test.yaml');
 
   var getArgv = function(cmd) {
     return cmd.split(' ');

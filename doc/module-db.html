@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Class: Repository</title>
+	<title>DocStrap Module: db</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -134,14 +134,12 @@
 					
 
 
-	<h1 class="page-title">Class: Repository</h1>
+	<h1 class="page-title">Module: db</h1>
 <section>
 
 <header>
     <h2>
-        <span class="ancestors"><a href="module-repository_movie_criteria.html">repository/movie/criteria</a>~</span>
-    
-    Repository
+    db
     </h2>
     
 </header>
@@ -152,27 +150,10 @@
 
     
         
-<dt>
-    <h4 class="name" id="Repository"><span class="type-signature"></span>new Repository<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>CriteraRepository
-centralize criteria access</p>
-    </div>
-    
+            <div class="description"><p>separate db connection module used for dependancy injection</p></div>
+        
 
-    
-    
-    
-    
-    
-    
-    
+        
 <dl class="details">
 	
 
@@ -199,8 +180,8 @@ centralize criteria access</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="repository_movie_criteria.js.html">repository/movie/criteria.js</a>,
-				 <a href="repository_movie_criteria.js.html#sunlight-1-line-45">line 45</a>
+				<a href="db.js.html">db.js</a>,
+				 <a href="db.js.html#sunlight-1-line-1">line 1</a>
 			</li>
 		</ul>
 	</dd>
@@ -213,20 +194,8 @@ centralize criteria access</p>
 	
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
+        
     
     </div>
 
@@ -248,7 +217,7 @@ centralize criteria access</p>
         <dl>
             
 <dt>
-    <h4 class="name" id="findByName"><span class="type-signature"></span>findByName<span class="signature">(name)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".connect"><span class="type-signature">&lt;static> </span>connect<span class="signature">(onConnected)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -256,7 +225,7 @@ centralize criteria access</p>
     
     
     <div class="description">
-        <p>return the criteria corresponding to the given name</p>
+        <p>connect to the database</p>
     </div>
     
 
@@ -290,7 +259,132 @@ centralize criteria access</p>
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>onConnected</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-db.html#~onConnected">module:db~onConnected</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="db.js.html">db.js</a>,
+				 <a href="db.js.html#sunlight-1-line-38">line 38</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".setConfigFileName"><span class="type-signature">&lt;static> </span>setConfigFileName<span class="signature">(fileName)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>override the defaut database config file</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>fileName</code></td>
             
 
             <td class="type">
@@ -342,8 +436,8 @@ centralize criteria access</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="repository_movie_criteria.js.html">repository/movie/criteria.js</a>,
-				 <a href="repository_movie_criteria.js.html#sunlight-1-line-53">line 53</a>
+				<a href="db.js.html">db.js</a>,
+				 <a href="db.js.html#sunlight-1-line-28">line 28</a>
 			</li>
 		</ul>
 	</dd>
@@ -366,17 +460,6 @@ centralize criteria access</p>
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>object</p>
-</div>
-
-
-
-
-        
     
     
 </dd>
@@ -384,6 +467,158 @@ centralize criteria access</p>
         </dl>
     
 
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        <dl>
+                
+<dt>
+    <h4 class="name" id="~onConnected"><span class="type-signature"></span>onConnected<span class="signature">(err, connection)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Callback used when the database is connected</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>err</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>connection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>(mongodb) connection</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="db.js.html">db.js</a>,
+				 <a href="db.js.html#sunlight-1-line-14">line 14</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+            </dl>
     
 
     

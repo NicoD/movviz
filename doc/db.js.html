@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Class: Repository</title>
+	<title>DocStrap Source: db.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -128,268 +128,69 @@
 	<div class="row-fluid">
 
 		
-		<div class="span8">
-			
+			<div class="span12">
+				
 				<div id="main">
 					
 
 
-	<h1 class="page-title">Class: Repository</h1>
+		<h1 class="page-title">Source: db.js</h1>
+    
 <section>
-
-<header>
-    <h2>
-        <span class="ancestors"><a href="module-repository_movie_criteria.html">repository/movie/criteria</a>~</span>
-    
-    Repository
-    </h2>
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-
-    
-        
-<dt>
-    <h4 class="name" id="Repository"><span class="type-signature"></span>new Repository<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>CriteraRepository
-centralize criteria access</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="repository_movie_criteria.js.html">repository/movie/criteria.js</a>,
-				 <a href="repository_movie_criteria.js.html#sunlight-1-line-45">line 45</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        <dl>
-            
-<dt>
-    <h4 class="name" id="findByName"><span class="type-signature"></span>findByName<span class="signature">(name)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>return the criteria corresponding to the given name</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="repository_movie_criteria.js.html">repository/movie/criteria.js</a>,
-				 <a href="repository_movie_criteria.js.html#sunlight-1-line-53">line 53</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>object</p>
-</div>
-
-
-
-
-        
-    
-    
-</dd>
-
-        </dl>
-    
-
-    
-
-    
-</article>
-
+	<article>
+		<pre
+			class="sunlight-highlight-javascript linenums">/**
+ * separate db connection module used for dependancy injection
+ * @module db
+ */
+'use strict';
+
+
+var path = require('path'),
+  yaml = require('js-yaml'),
+  fs = require('fs'),
+  MongoClient = require('mongodb').MongoClient;
+
+
+/**
+ * Callback used when the database is connected
+ * @callback module:db~onConnected
+ * @param {String} err
+ * @param {Object} connection - (mongodb) connection
+ */
+
+var configFile = path.dirname(require.main.filename) + '/config/database.yaml';
+
+
+/**
+ * override the defaut database config file
+ * @param {String} fileName
+ */
+module.exports.setConfigFileName = function(fileName) {
+  configFile = fileName;
+};
+
+
+/**
+ * connect to the database
+ *
+ * @param {module:db~onConnected}
+ */
+module.exports.connect = function(onConnected) {
+
+  fs.readFile(configFile, function(err, data) {
+    if(err) {
+      return onConnected(err);
+    }
+
+    var doc = yaml.safeLoad(data),
+      line = 'mongodb://' + doc.host + ':' + doc.port + '/' + doc.database;
+    MongoClient.connect(line, onConnected);
+  });
+};</pre>
+	</article>
 </section>
+
 
 
 
@@ -413,10 +214,6 @@ centralize criteria access</p>
 				</footer>
 			</div>
 
-			
-			<div class="span3">
-				<div id="toc"></div>
-			</div>
 			
 			<br clear="both">
 		</div>

@@ -7,7 +7,7 @@
     "exports" : true,
     "module"  : true,
     "__dirname" : true,
-
+    "__dirfilename": true,
     "describe": true,
     "it"     : true,
     "process": true
