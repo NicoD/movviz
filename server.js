@@ -6,7 +6,7 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
 
     movieRepositoryFactory = require('./lib/repository/movie'),
-    mydb = require('./mydb');
+    mydb = require('./lib/db');
 
 var app = express();
 
