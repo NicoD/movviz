@@ -4,7 +4,7 @@ var express = require('express'),
     path = require('path'),
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
-
+    paginationFactory = require('./lib/utils/pagination'),
     movieRepositoryFactory = require('./lib/repository/movie'),
     mydb = require('./lib/db');
 
@@ -25,24 +25,36 @@ app.get('/', function(req, res) {
 });
 
 
-app.get('/movies', function(req, res) {
+app.get('/api/movies/:page?', function(req, res) {
   mydb.connect(function(err, db) {
     if(err) { throw err; }
-    
-    var movies = [];
-    var action = require('./lib/action/list').create({}, movieRepositoryFactory.create(db));
+   
+    var resultPerPage = 50;
+    var page = req.params.page ? parseInt(req.params.page) : 0;
+
+    var pagination = paginationFactory.create(req.params.page ? parseInt(req.params.page, 10) : 0, 50);
+    var results = {
+      pagination: pagination,
+      movies: []
+    };
+    var action = require('./lib/action/list').create(
+                  {}, 
+                  pagination,
+                  movieRepositoryFactory.create(db)
+                );
     action.on('process-done', function() {
-      res.send(movies);
+      res.send(results);
     });
 
-
-    var iterator = action.process();
-    var iterate = function(err, obj) {
-      if(!obj) { return; }
-      movies.push(obj);
+    var movies = results.movies;
+    action.process(function(err, iterator) {
+      var iterate = function(err, obj) {
+        if(!obj) { return; }
+        movies.push(obj);
+        iterator.next(iterate);
+      };
       iterator.next(iterate);
-    };
-    iterator.next(iterate);
+    });
   });
 });
 
