@@ -1,15 +1,13 @@
 doctype html
-html(lang="en")
+html(lang="en", ng-app="movvizApp")
   head
     title= Movviz
     link(rel='stylesheet', href='public/css/main.css')
-  body(ng-app, ng-controller="mainCtrl")
-    h1 {{mzTitle}}
-    #container(ng-controller="listCtrl") {{mzTitle}}
-      p.
-      Cras placerat diam ac mi cursus lacinia. Nulla gravida vel libero eu vehicula. Cras efficitur massa metus, ut ultrices augue porttitor eget. Ut sodales est ex, sit amet varius justo porttitor vitae. Fusce viverra tortor et lobortis dapibus. Nunc at condimentum risus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a pulvinar turpis, at ultricies leo. Vivamus ut ex mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-      Aliquam non iaculis nunc, et volutpat velit. Sed volutpat varius sem ut volutpat. Donec convallis hendrerit sapien. Integer suscipit, dui sit amet imperdiet vulputate, quam nunc finibus leo, vel commodo mi massa ut massa. Duis sed dictum tortor. Integer consequat ut est ac efficitur.
+    link(rel='stylesheed', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css')
+  body
+    div(ng-view)
 
 
     script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js')
+    script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.min.js')
     script(src='public/scripts/movviz.min.js')

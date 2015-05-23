@@ -49,7 +49,10 @@ module.exports = function(grunt) {
       },
       my_target: {
         files: {
-          'public/scripts/movviz.min.js': ['assets/javascript/main.js']
+          'public/scripts/movviz.min.js': [
+                                            'assets/javascript/app.js', 
+                                            'assets/javascript/controller.js'
+                                          ]
         }
       }
     },

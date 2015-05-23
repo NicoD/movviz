@@ -20,8 +20,16 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 // only for dev purpose (sourceMap);
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
+
+
 app.get('/', function(req, res) {
   res.render('index');
+});
+
+// partial view are render through jade just for consistency
+app.get('/partial/:name?', function(req, res) {
+  console.log('partial/'+req.params.name);
+  res.render('partial/' + req.params.name);  
 });
 
 
@@ -29,10 +37,10 @@ app.get('/api/movies/:page?', function(req, res) {
   mydb.connect(function(err, db) {
     if(err) { throw err; }
    
-    var resultPerPage = 50;
+    var resultsPerPage = 20;
     var page = req.params.page ? parseInt(req.params.page) : 0;
 
-    var pagination = paginationFactory.create(req.params.page ? parseInt(req.params.page, 10) : 0, 50);
+    var pagination = paginationFactory.create(req.params.page ? parseInt(req.params.page, 10) : 0, resultsPerPage);
     var results = {
       pagination: pagination,
       movies: []
