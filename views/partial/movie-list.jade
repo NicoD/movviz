@@ -1,24 +1,33 @@
-article(ng-show='movies.length')
-  ul(id='movie-list')
-    li(ng-repeat='movie in movies')
-      .view
-        span
-          {{movie.title}} ({{movie.year}})
-        span
-          {{movie.rating}}
-        span
-          a(href='#/movie/{{movie._id}}/')
-            [+] more
+#movie-list.row
+  .col-xs-10
+    article(ng-show='movies.length')
+      ul(id='movie-list')
+        li(ng-repeat='movie in movies')
+          .view
+            span
+              {{movie.title}} ({{movie.year}})
+            span
+              {{movie.rating}}
+            span
+              a(href='#/movie/{{movie._id}}/')
+                [+] more
 
-div.pagination
-  ul
-    li(ng-class='prevPageDisabled()', ng-click='gotoPage();')
-      a(href='#', disabled-link) «« First
-    li(ng-class='prevPageDisabled()', ng-click='gotoPage(currentPage);')
-      a(href='#', disabled-link) « Prev
-    li(ng-repeat='n in range()', ng-class='{active: n == currentPage}', ng-click='gotoPage(n+1);')
-      a(href='#', disabled-link) {{n+1}}
-    li(ng-class='nextPageDisabled()', ng-click='gotoPage(currentPage+2);')
-      a(href='#', disabled-link) Next »
-    li(ng-class='nextPageDisabled()', ng-click='gotoPage(totalPages);')
-      a(href='#', disabled-link) Last »»
+    div.pagination
+      ul
+        li(ng-class='prevPageDisabled()', ng-click='goto();')
+          a(href='#', disabled-link) «« First
+        li(ng-class='prevPageDisabled()', ng-click='goto(currentPage);')
+          a(href='#', disabled-link) « Prev
+        li(ng-repeat='n in range()', ng-class='{active: n == currentPage}', ng-click='goto(n+1);')
+          a(href='#', disabled-link) {{n+1}}
+        li(ng-class='nextPageDisabled()', ng-click='goto(currentPage+2);')
+          a(href='#', disabled-link) Next »
+        li(ng-class='nextPageDisabled()', ng-click='goto(totalPages);')
+          a(href='#', disabled-link) Last »»
+  .form.col-sm-2
+    form(ng-submit='search()')
+      .form-group
+        input(type='text', class='form-control', ng-model='searchPatternForm', placeholder='Search')
+      .form-group
+        input(type='submit', value="Go!")
+        

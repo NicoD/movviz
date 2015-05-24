@@ -51,7 +51,6 @@
       link: function(scope, element, attr) {
         element.on('click', function(e) {
           e.preventDefault();
-          return false;
         });
       }
     };

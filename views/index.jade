@@ -2,12 +2,14 @@ doctype html
 html(lang="en", ng-app="movvizApp")
   head
     title= Movviz
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css')
     link(rel='stylesheet', href='public/css/main.css')
-    link(rel='stylesheed', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css')
   body
-    div(ng-view)
+    .container
+      div(ng-view)
 
-
+    script(src='http://code.jquery.com/jquery-2.1.4.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js')
     script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js')
     script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.min.js')
     script(src='public/scripts/movviz.min.js')

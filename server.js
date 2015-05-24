@@ -52,7 +52,7 @@ var sendMovieList = function(req, res, criteria) {
   mydb.connect(function(err, db) {
     if(err) { throw err; }
    
-    var resultsPerPage = 20;
+    var resultsPerPage = 50;
     var pagination = paginationFactory.create(req.params.page ? parseInt(req.params.page, 10) : 0, resultsPerPage);
     var results = {
       pagination: pagination,

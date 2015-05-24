@@ -1,1 +1,1 @@
-body{color:#232323;background:#dc9103}div.pagination li.disabled{display:none}
+body{margin-top:99px}div.pagination ul{list-style-type:none}div.pagination li.disabled{display:none}div.pagination li{display:inline;margin-left:5px;margin-right:5px}#movie-list .form{display:block}#movie-list .form form input[type='text']{width:196px}

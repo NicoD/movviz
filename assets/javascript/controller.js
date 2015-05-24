@@ -6,13 +6,13 @@
 
   movvizControllers.controller('MovvizListCtrl', ['$scope', '$http', '$routeParams', '$window',
     function($scope, $http, $routeParams, $window) {
-
-      var page = parseInt($routeParams.page, 10), 
-          search = $routeParams.search;
+      
+      var page = parseInt($routeParams.page, 10);
+      $scope.searchPattern = $routeParams.search;
       // just to reorganize parametes to allow better urls
       if(!$routeParams.search && $routeParams.page && (isNaN(page) || page%1)) {
         page = 0;
-        search = $routeParams.page;
+        $scope.searchPattern = $routeParams.page; // inverted arg
       } 
       else if(isNaN(page) || page%1) { 
         page = 0; 
@@ -21,8 +21,8 @@
       }
       var movies = $scope.movies = [];
       var apiUrl = '/api/movies/';
-      if(search) {
-        apiUrl += encodeURIComponent(search) + '/';
+      if($scope.searchPattern) {
+        apiUrl += encodeURIComponent($scope.searchPattern) + '/';
       }
       apiUrl += page;
 
@@ -36,6 +36,12 @@
            .error(function(data, status, headers, config) {
               console.log('error');
            });
+
+      if($scope.searchPattern) {
+        $scope.searchPatternForm = $scope.searchPattern;
+      }
+
+
 
       $scope.range = function() {
         var rangeSize = 10;
@@ -55,12 +61,36 @@
         return $scope.currentPage === $scope.totalPages-1 ? "disabled" : "";
       };
 
-      $scope.gotoPage = function(page, $event) {
+      $scope.goto = function(page) {
         page = page || 1;
-        var target = '#/movies/'+page;
+        var target = '#/movies/';
+        if(this.searchPattern) {
+          target += encodeURIComponent(this.searchPattern) + '/';
+        }
+        if(page) {
+          target += page + '/';
+        }
         $window.location.href = target;
         return false;
       };
+
+
+      $scope.search = function() {
+        // i use this trick so that the search input is directly binding
+        // to a temp variable scope, so that the search function validate the
+        // current search. This is used to prevent navigation from using the search
+        // pattern if it has not been submited
+        this.searchPattern = this.searchPatternForm;
+        this.goto();
+      };
+
+      $scope.$on('$viewContentLoaded', function() { 
+        $('#movie-list .form > form').affix({
+          offset: {
+            top:0
+          }
+        });
+      });
     }
   ]);
 
