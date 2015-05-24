@@ -10,9 +10,17 @@
   movvizApp.config(['$routeProvider',
     function($routeProvider) {
       $routeProvider.
-        when('/movies/:page?', {
+        when('/movies', {
           templateUrl: 'partial/movie-list',
-          controller:  'MovvizListCtrl'
+          controller: 'MovvizListCtrl'
+        }).
+        when('/movies/:page', {
+          templateUrl: 'partial/movie-list',
+          controller: 'MovvizListCtrl'
+        }).
+        when('/movies/:search/:page', {
+          templateUrl: 'partial/movie-list',
+          controller: 'MovvizListCtrl'
         }).
         when('/movie/:id?', {
           templateUrl: 'partial/movie-detail',
@@ -22,5 +30,30 @@
           redirectTo: '/movies'
         });
      }  
-  ]);
+  ])
+
+
+
+
+  .directive('stopEvent', function() {
+    return {
+      restrict: 'A',
+      link: function (scope, element, attr) {
+        element.bind(attr.stopEvent, function (e) {
+          e.stopPropagation();
+        });
+      }
+    };
+  })
+
+  .directive('disabledLink', function() {
+    return {
+      link: function(scope, element, attr) {
+        element.on('click', function(e) {
+          e.preventDefault();
+          return false;
+        });
+      }
+    };
+  });
 }(window));

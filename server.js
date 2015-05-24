@@ -6,6 +6,7 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     paginationFactory = require('./lib/utils/pagination'),
     movieRepositoryFactory = require('./lib/repository/movie'),
+    movieCriteriaRepositoryFactory = require('./lib/repository/movie/criteria'),
     mydb = require('./lib/db');
 
 var app = express();
@@ -33,20 +34,32 @@ app.get('/partial/:name?', function(req, res) {
 });
 
 
-app.get('/api/movies/:page?', function(req, res) {
+app.get('/api/movies/:search/:page', function(req, res) {
+  var definition = movieCriteriaRepositoryFactory.create().findByName('search');
+  var criteria = {
+    "$where": definition.getWhere([req.params.search, 1])
+  };
+  sendMovieList(req, res, criteria);
+});
+
+app.get('/api/movies/:page', function(req, res) {
+  sendMovieList(req, res);
+});
+
+
+var sendMovieList = function(req, res, criteria) {
+
   mydb.connect(function(err, db) {
     if(err) { throw err; }
    
     var resultsPerPage = 20;
-    var page = req.params.page ? parseInt(req.params.page) : 0;
-
     var pagination = paginationFactory.create(req.params.page ? parseInt(req.params.page, 10) : 0, resultsPerPage);
     var results = {
       pagination: pagination,
       movies: []
     };
     var action = require('./lib/action/list').create(
-                  {}, 
+                  criteria, 
                   pagination,
                   movieRepositoryFactory.create(db)
                 );
@@ -64,7 +77,7 @@ app.get('/api/movies/:page?', function(req, res) {
       iterator.next(iterate);
     });
   });
-});
+};
 
 app.get('/api/movie/:id?', function(req, res) {
   mydb.connect(function(err, db) {
