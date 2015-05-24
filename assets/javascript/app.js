@@ -14,7 +14,7 @@
           templateUrl: 'partial/movie-list',
           controller:  'MovvizListCtrl'
         }).
-        when('movvies/:movieId/?', {
+        when('/movie/:id?', {
           templateUrl: 'partial/movie-detail',
           controller: 'MovvizDetailCtrl'
         }).

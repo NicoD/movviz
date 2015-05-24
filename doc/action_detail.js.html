@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Source: command/builder/install.js</title>
+	<title>DocStrap Source: action/detail.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -154,35 +154,70 @@
 					
 
 
-		<h1 class="page-title">Source: command/builder/install.js</h1>
+		<h1 class="page-title">Source: action/detail.js</h1>
     
 <section>
 	<article>
 		<pre
 			class="sunlight-highlight-javascript linenums">/**
- * command install action  builder
- * @module command/builder/install
+ * data detail module
+ * @module action/detail
  */
 'use strict';
 
-var movieRepositoryFactory = require('../../repository/movie'),
-  actionFactory = require('../../action/install');
+var events = require('events'),
+  util = require('util'),
+  logger = require('../utils/logger').Logger,
 
-/**
- * Callback used when the action is build
- * @callback module:command/builder/install~onBuild
- * @param {string} error
- * @param {Object} action
- */
 
-/**
- * list action builder
- * @param {Object} db - database connection
- * @param {Object} program - cmd line result
- * @param {module:command/builder/list~onBuild} onBuild
+  /**
+   * Detail is used to ... to get the detail of a movies
+   * @class
+   * @param {String} id
+   * @param {module:entity/repository} repository
+   */
+  DetailAction = function(id, repository) {
+
+    /**
+     * Callback used when the process is ready
+     * @callback module:action/detail~DetailAction~onReady
+     * @param {string} error
+     * @param {Object} result
+     */
+
+
+    var self = this;
+    events.EventEmitter.call(this);
+
+    /**
+     * process the import
+     * @param {module:action/detail~DetailAction~onReady}
+     */
+    this.process = function(onReady) {
+      self.emit('process-start');
+      logger.log('info', 'search detail from movie ' + id);
+      var result = repository.getById(id, function(err, item) {
+        if(err) {
+          return onReady(err);
+        }
+
+        onReady(null, item);
+        self.emit('process-done');
+      });
+    };
+  };
+
+util.inherits(DetailAction, events.EventEmitter);
+
+
+/** 
+ * Detail factory
+ * @param {String} id - movie id
+ * @param {module:entity/MovieRepository} repository
+ * @return {module:action/detail~DetailAction}
  */
-exports.create = function(db, program, onBuild) {
-  onBuild(null, actionFactory.create(movieRepositoryFactory.create(db)));
+module.exports.create = function(id, repository) {
+  return new DetailAction(id, repository);
 };</pre>
 	</article>
 </section>

@@ -40,9 +40,15 @@
     }
   ]);
 
-  movvizControllers.controller('MovvizDetailCtrl', ['$scope', '$http',
-      function($scope, $http) {
-
+  movvizControllers.controller('MovvizDetailCtrl', ['$scope', '$http', '$routeParams',
+      function($scope, $http, $routeParams) {
+        $http.get('/api/movie/'+$routeParams.id)
+             .success(function(data, status, headers, config) {
+               $scope.movie = data;
+             })
+             .error(function(data, status, headers, config) {
+               console.log('error');
+             });
 
       }
   ]);

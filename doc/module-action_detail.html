@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Source: command/builder/install.js</title>
+	<title>DocStrap Module: action/detail</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -148,45 +148,275 @@
 	<div class="row-fluid">
 
 		
-			<div class="span12">
-				
+		<div class="span8">
+			
 				<div id="main">
 					
 
 
-		<h1 class="page-title">Source: command/builder/install.js</h1>
-    
+	<h1 class="page-title">Module: action/detail</h1>
 <section>
-	<article>
-		<pre
-			class="sunlight-highlight-javascript linenums">/**
- * command install action  builder
- * @module command/builder/install
- */
-'use strict';
 
-var movieRepositoryFactory = require('../../repository/movie'),
-  actionFactory = require('../../action/install');
+<header>
+    <h2>
+    action/detail
+    </h2>
+    
+</header>
 
-/**
- * Callback used when the action is build
- * @callback module:command/builder/install~onBuild
- * @param {string} error
- * @param {Object} action
- */
+<article>
+    <div class="container-overview">
+    
 
-/**
- * list action builder
- * @param {Object} db - database connection
- * @param {Object} program - cmd line result
- * @param {module:command/builder/list~onBuild} onBuild
- */
-exports.create = function(db, program, onBuild) {
-  onBuild(null, actionFactory.create(movieRepositoryFactory.create(db)));
-};</pre>
-	</article>
+    
+        
+            <div class="description"><p>data detail module</p></div>
+        
+
+        
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="action_detail.js.html">action/detail.js</a>,
+				 <a href="action_detail.js.html#sunlight-1-line-1">line 1</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="module-action_detail-DetailAction.html">DetailAction</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<dt>
+    <h4 class="name" id=".create"><span class="type-signature">&lt;static> </span>create<span class="signature">(id, repository)</span><span class="type-signature"> &rarr; {<a href="module-action_detail-DetailAction.html">module:action/detail~DetailAction</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Detail factory</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>movie id</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>repository</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:entity/MovieRepository</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="action_detail.js.html">action/detail.js</a>,
+				 <a href="action_detail.js.html#sunlight-1-line-58">line 58</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="module-action_detail-DetailAction.html">module:action/detail~DetailAction</a></span>
+
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
 </section>
-
 
 
 
@@ -210,6 +440,10 @@ exports.create = function(db, program, onBuild) {
 				</footer>
 			</div>
 
+			
+			<div class="span3">
+				<div id="toc"></div>
+			</div>
 			
 			<br clear="both">
 		</div>

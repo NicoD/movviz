@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Source: command/builder/install.js</title>
+	<title>DocStrap Source: utils/pagination.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -154,35 +154,63 @@
 					
 
 
-		<h1 class="page-title">Source: command/builder/install.js</h1>
+		<h1 class="page-title">Source: utils/pagination.js</h1>
     
 <section>
 	<article>
 		<pre
 			class="sunlight-highlight-javascript linenums">/**
- * command install action  builder
- * @module command/builder/install
+ * Pagination utils
+ * @module utils/pagination
  */
 'use strict';
 
-var movieRepositoryFactory = require('../../repository/movie'),
-  actionFactory = require('../../action/install');
+var logger = require('../utils/logger').Logger,
+
+  /**
+   * create a new pagination object
+   * @class
+   * @param {Number} page - current page
+   * @param {Number} resultsPerPage
+   */
+  Pagination = function(page, resultsPerPage) {
+    this.page = page;
+    this.resultsPerPage = resultsPerPage;
+
+    this.currentPage = this.page;
+    this.totalPages = -1;
+    this.totalResults = -1;
+  };
+
 
 /**
- * Callback used when the action is build
- * @callback module:command/builder/install~onBuild
- * @param {string} error
- * @param {Object} action
+ * apply the mongodb results to the current pagination
+ * @param {Object} results - mongodb cursor
+ * @param {Number} totalResults
  */
+Pagination.prototype.applyTo = function(results, totalResults) {
+  logger.log('info', 'apply pagination (%d, %d) to %d results', this.page, this.resultsPerPage, totalResults);
+  if(this.resultsPerPage) {
+    if(totalResults) {
+      this.totalResults = totalResults;
+      this.totalPages = Math.ceil(totalResults / this.resultsPerPage);
+    }
+    if(this.page) {
+      results.skip(this.page * this.resultsPerPage);
+    }
+    results.limit(this.resultsPerPage);
+  }
+};
+
 
 /**
- * list action builder
- * @param {Object} db - database connection
- * @param {Object} program - cmd line result
- * @param {module:command/builder/list~onBuild} onBuild
+ * create a new pagination object
+ * @param {Number} page - current page
+ * @param {Number} resultsPerPage
+ * @return {module:utils/pagination~Pagination} pagination
  */
-exports.create = function(db, program, onBuild) {
-  onBuild(null, actionFactory.create(movieRepositoryFactory.create(db)));
+module.exports.create = function(page, resultsPerPage) {
+  return new Pagination(page, resultsPerPage);
 };</pre>
 	</article>
 </section>

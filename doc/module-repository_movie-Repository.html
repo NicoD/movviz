@@ -28,11 +28,19 @@
 					<ul class="dropdown-menu ">
 						
 						<li>
+							<a href="module-action_detail.html">action/detail</a>
+						</li>
+						
+						<li>
 							<a href="module-action_install.html">action/install</a>
 						</li>
 						
 						<li>
 							<a href="module-action_list.html">action/list</a>
+						</li>
+						
+						<li>
+							<a href="module-command_builder_detail.html">command/builder/detail</a>
 						</li>
 						
 						<li>
@@ -79,6 +87,10 @@
 							<a href="module-utils_logger.html">utils/logger</a>
 						</li>
 						
+						<li>
+							<a href="module-utils_pagination.html">utils/pagination</a>
+						</li>
+						
 
 					</ul>
 				</li>
@@ -88,6 +100,10 @@
 						class="caret"></b></a>
 
 					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="module-action_detail-DetailAction.html">action/detail~DetailAction</a>
+						</li>
 						
 						<li>
 							<a href="module-action_install-InstallAction.html">action/install~InstallAction</a>
@@ -115,6 +131,10 @@
 						
 						<li>
 							<a href="module-utils_logger-Logger.html">utils/logger~Logger</a>
+						</li>
+						
+						<li>
+							<a href="module-utils_pagination-Pagination.html">utils/pagination~Pagination</a>
 						</li>
 						
 
@@ -249,7 +269,7 @@ centralize data access</p>
 		<ul class="dummy">
 			<li>
 				<a href="repository_movie.js.html">repository/movie.js</a>,
-				 <a href="repository_movie.js.html#sunlight-1-line-14">line 14</a>
+				 <a href="repository_movie.js.html#sunlight-1-line-17">line 17</a>
 			</li>
 		</ul>
 	</dd>
@@ -392,7 +412,7 @@ centralize data access</p>
 		<ul class="dummy">
 			<li>
 				<a href="repository_movie.js.html">repository/movie.js</a>,
-				 <a href="repository_movie.js.html#sunlight-1-line-94">line 94</a>
+				 <a href="repository_movie.js.html#sunlight-1-line-105">line 105</a>
 			</li>
 		</ul>
 	</dd>
@@ -422,7 +442,7 @@ centralize data access</p>
         
             
 <dt>
-    <h4 class="name" id="find"><span class="type-signature"></span>find<span class="signature">(criteria)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="find"><span class="type-signature"></span>find<span class="signature">(criteria, pagination, onFound)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -484,6 +504,52 @@ centralize data access</p>
         </tr>
 
 	
+
+        <tr>
+            
+                <td class="name"><code>pagination</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-utils_pagination-Pagination.html">module:utils/pagination~Pagination</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>onFound</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-repository_movie-Repository.html#~onFound">module:repository/movie~Repository~onFound</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
 	</tbody>
 </table>
 
@@ -517,7 +583,7 @@ centralize data access</p>
 		<ul class="dummy">
 			<li>
 				<a href="repository_movie.js.html">repository/movie.js</a>,
-				 <a href="repository_movie.js.html#sunlight-1-line-103">line 103</a>
+				 <a href="repository_movie.js.html#sunlight-1-line-115">line 115</a>
 			</li>
 		</ul>
 	</dd>
@@ -540,17 +606,154 @@ centralize data access</p>
     
     
     
-    <h5>Returns:</h5>
     
-            
-<div class="param-desc">
-    <p>cursor</p>
-</div>
-
-
-
+    
+</dd>
 
         
+            
+<dt>
+    <h4 class="name" id="getById"><span class="type-signature"></span>getById<span class="signature">(id, onFound)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>return one result by its id</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">id</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>onFound</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-repository_movie-Repository.html#~onFound">module:repository/movie~Repository~onFound</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="repository_movie.js.html">repository/movie.js</a>,
+				 <a href="repository_movie.js.html#sunlight-1-line-135">line 135</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
     
     
 </dd>
@@ -627,7 +830,7 @@ doc example:
 		<ul class="dummy">
 			<li>
 				<a href="repository_movie.js.html">repository/movie.js</a>,
-				 <a href="repository_movie.js.html#sunlight-1-line-44">line 44</a>
+				 <a href="repository_movie.js.html#sunlight-1-line-55">line 55</a>
 			</li>
 		</ul>
 	</dd>
@@ -775,7 +978,7 @@ doc example:
 		<ul class="dummy">
 			<li>
 				<a href="repository_movie.js.html">repository/movie.js</a>,
-				 <a href="repository_movie.js.html#sunlight-1-line-86">line 86</a>
+				 <a href="repository_movie.js.html#sunlight-1-line-97">line 97</a>
 			</li>
 		</ul>
 	</dd>
@@ -806,6 +1009,158 @@ doc example:
     
 
     
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        <dl>
+                
+<dt>
+    <h4 class="name" id="~onFound"><span class="type-signature"></span>onFound<span class="signature">(err, result)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Callback used when result is ready</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>err</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>result</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="repository_movie.js.html">repository/movie.js</a>,
+				 <a href="repository_movie.js.html#sunlight-1-line-20">line 20</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+            </dl>
+    
 
     
 </article>
@@ -828,7 +1183,7 @@ doc example:
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a>
-		on Mon May 18th 2015 using the <a
+		on Sun May 24th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

@@ -66,4 +66,14 @@ app.get('/api/movies/:page?', function(req, res) {
   });
 });
 
+app.get('/api/movie/:id?', function(req, res) {
+  mydb.connect(function(err, db) {
+    if(err) { throw err; }
+    var action = require('./lib/action/detail').create(req.params.id, movieRepositoryFactory.create(db));
+    action.process(function(err, result) {
+      res.send(result);
+    });
+  });
+});
+
 app.listen(80);
