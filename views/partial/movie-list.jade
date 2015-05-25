@@ -11,12 +11,9 @@
             span
               a(href='#/movie/{{movie._id}}/')
                 [+] more
-
-    pagination
-
-
-    
-.form.col-sm-2
+      pagination
+  
+  .form.col-sm-2
     form(ng-submit='search()')
       .form-group
         input(type='text', class='form-control', ng-model='searchPatternForm', placeholder='Search')

@@ -4,8 +4,8 @@
 
   var movvizControllers = angular.module('movvizControllers', []);
 
-  movvizControllers.controller('MovvizListCtrl', ['$scope', '$http', '$routeParams', '$window',
-    function($scope, $http, $routeParams, $window) {
+  movvizControllers.controller('MovvizListCtrl', ['$scope', '$http', '$routeParams', '$location',
+    function($scope, $http, $routeParams, $location) {
       
       var page = parseInt($routeParams.page, 10);
       $scope.searchPattern = $routeParams.search;
@@ -63,14 +63,14 @@
 
       $scope.goto = function(page) {
         page = page || 1;
-        var target = '#/movies/';
+        var target = '/movies/';
         if(this.searchPattern) {
           target += encodeURIComponent(this.searchPattern) + '/';
         }
         if(page) {
           target += page + '/';
         }
-        $window.location.href = target;
+        $location.path(target);
         return false;
       };
 

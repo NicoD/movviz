@@ -23,10 +23,6 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 
 
-app.get('/', function(req, res) {
-  res.render('index');
-});
-
 // partial view are render through jade just for consistency
 app.get('/partial/:name?', function(req, res) {
   console.log('partial/'+req.params.name);
@@ -89,4 +85,9 @@ app.get('/api/movie/:id?', function(req, res) {
   });
 });
 
+
+// support HTML5Mode
+app.get('/*', function(req, res) {
+  res.render('index');
+});
 app.listen(80);

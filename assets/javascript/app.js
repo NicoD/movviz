@@ -7,8 +7,11 @@
   ]);
 
 
-  movvizApp.config(['$routeProvider',
-    function($routeProvider) {
+  movvizApp.config(['$locationProvider', '$routeProvider',
+    function($locationProvider, $routeProvider) {
+
+      $locationProvider.html5Mode(true);
+
       $routeProvider.
         when('/movies', {
           templateUrl: 'partial/movie-list',
