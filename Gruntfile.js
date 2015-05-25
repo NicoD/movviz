@@ -4,22 +4,37 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     jshint: {
-      files: ['movviz.js', 'lib/**/*.js', 'test/**/*.js',' asset/javascript/**/*.js'],
-      options: {
-        jshintrc: '.jshintrc' 
+      server: {
+        src: ['./movviz.js', 'server.js', 'lib/**/*.js', 'test/**/*.js'],
+        options: {
+          jshintrc: '.jshintrc' 
+        }
+      },
+      client: {
+        src: ['asset/javascript/**/*.js'],
+        options: {
+          jshintrc: '.jshintrc' 
+        }
       }
     },
 
     jsbeautifier: {
-      files: ['movviz.js', 'lib/**/*.js', 'test/**/*.js'],
-      options: {
-        config: ".jsbeautifyrc"
+      server: {
+        src: ['movviz.js', 'server.js', 'lib/**/*.js', 'test/**/*.js'],
+        options: {
+          config: ".jsbeautifyrc"
+        }
+      },
+      client: {
+        src: ['assets/javascrpt/**/*.js'],
+        options: {
+          config: ".jsbeautifyrc"
+        }
       }
     },
 
-    // server only
-    jsdoc: {
-      dist: {
+    jsdoc: { 
+      server: {
         src: ['lib/**/*.js'],
         options: {
           destination: 'doc',
@@ -29,9 +44,8 @@ module.exports = function(grunt) {
       }
     },
 
-
-    less: {
-      development: {
+    less: { // client only
+      client: {
         options: {
           compress: true,
           optimization: 2
@@ -42,7 +56,7 @@ module.exports = function(grunt) {
       }
     },
 
-    uglify: {
+    uglify: { // client only
       options: {
         mangle: false,
         sourceMap: true
@@ -57,9 +71,22 @@ module.exports = function(grunt) {
       }
     },
 
-    mochaTest: {
+
+    mochaTest: { // server only
       test: {
         src: ['test/**/*.js'],
+      }
+    },
+
+    karma: { // client only
+      unit: {
+        configFile: 'karma.conf.js',
+        background: true,
+        singleRun: false
+      },
+      continuous: {
+        configFile: 'karma.conf.js',
+        singleRun: true
       }
     },
 
@@ -76,10 +103,14 @@ module.exports = function(grunt) {
         files: ['assets/javascript/**/*.js'],
         tasks: ['uglify']
       },
+      karma: {
+        files: ['assets/javascript/**/*.js'],
+        tasks: ['karma:unit:run']
+      }, 
       js: {
-        files: ['<%= jshint.files %>'],
+        files: ['<%= jshint.client.src %>', '<?= jshint.server.src %>'],
         tasks: ['jshint']
-      }
+      } 
     }
   });
 
@@ -92,9 +123,9 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('default', ['mochaTest', 'jsbeautifier', 'jshint', 'jsdoc', 'less']);
-
-  grunt.registerTask('web', ['uglify', 'less']);
-
+  grunt.registerTask('server', ['mochaTest', 'jsbeautifier', 'jshint:server', 'jsdoc:server']);
+  grunt.registerTask('client', ['karma:continuous', 'jsbeautifier', 'jshint:client',  'uglify', 'less']);
+  
 };
