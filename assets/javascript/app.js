@@ -54,5 +54,15 @@
         });
       }
     };
+  })
+
+  .directive('pagination', function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'partial/pagination'
+    };
+  
   });
+
+
 }(window));

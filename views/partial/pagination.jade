@@ -1,0 +1,12 @@
+div.pagination
+  ul
+    li(ng-class='prevPageDisabled()', ng-click='goto();')
+      a(href='#', disabled-link) «« First
+    li(ng-class='prevPageDisabled()', ng-click='goto(currentPage);')
+      a(href='#', disabled-link) « Prev
+    li(ng-repeat='n in range()', ng-class='{active: n == currentPage}', ng-click='goto(n+1);')
+      a(href='#', disabled-link) {{n+1}}
+    li(ng-class='nextPageDisabled()', ng-click='goto(currentPage+2);')
+      a(href='#', disabled-link) Next »
+    li(ng-class='nextPageDisabled()', ng-click='goto(totalPages);')
+      a(href='#', disabled-link) Last »»
