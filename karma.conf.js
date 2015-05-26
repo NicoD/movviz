@@ -17,6 +17,12 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'node_modules/chai/chai.js',
+      'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js',
+      'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.min.js',
+      'node_modules/angular-mocks/angular-mocks.js',
+      'assets/javascript/app.js',
+      'assets/javascript/route.config.js',
       'assets/javascript/**/*-spec.js'
     ],
 
