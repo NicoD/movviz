@@ -130,7 +130,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('server', ['mochaTest', 'jsbeautifier', 'jshint:server', 'jsdoc:server']);
+  grunt.registerTask('server', ['mochaTest', 'jsbeautifier', 'jshint:server']);
   grunt.registerTask('client', ['karma:continuous', 'jsbeautifier', 'jshint:client',  'uglify', 'less']);
   grunt.registerTask('default', ['server', 'client']);
 };
