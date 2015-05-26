@@ -11,7 +11,7 @@ module.exports = function(grunt) {
         }
       },
       client: {
-        src: ['asset/javascript/**/*.js'],
+        src: ['assets/javascript/**/*.js'],
         options: {
           jshintrc: '.jshintrc' 
         }
@@ -26,7 +26,7 @@ module.exports = function(grunt) {
         }
       },
       client: {
-        src: ['assets/javascrpt/**/*.js'],
+        src: ['assets/javascript/**/*.js'],
         options: {
           config: ".jsbeautifyrc"
         }
@@ -65,7 +65,12 @@ module.exports = function(grunt) {
         files: {
           'public/scripts/movviz.min.js': [
                                             'assets/javascript/app.js', 
-                                            'assets/javascript/controller.js'
+                                            'assets/javascript/route.config.js',
+                                            'assets/javascript/movielist.controller.js',
+                                            'assets/javascript/moviedetail.controller.js',
+                                            'assets/javascript/components/utils/utils.directive.js',
+                                            'assets/javascript/components/paginator/paginator.directive.js',
+                                            'assets/javascript/components/paginator/paginator.service.js'
                                           ]
         }
       }
@@ -127,5 +132,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('server', ['mochaTest', 'jsbeautifier', 'jshint:server', 'jsdoc:server']);
   grunt.registerTask('client', ['karma:continuous', 'jsbeautifier', 'jshint:client',  'uglify', 'less']);
-  
+  grunt.registerTask('default', ['server', 'client']);
 };
