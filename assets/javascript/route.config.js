@@ -10,19 +10,19 @@
   function config($routeProvider) {
     $routeProvider.
     when('/movies', {
-      templateUrl: 'partial/movie-list',
+      templateUrl: 'movielist.partial.html',
       controller: 'MovieListController'
     }).
     when('/movies/:page', {
-      templateUrl: 'partial/movie-list',
+      templateUrl: 'movielist.partial.html',
       controller: 'MovieListController'
     }).
     when('/movies/:search/:page', {
-      templateUrl: 'partial/movie-list',
+      templateUrl: 'movielist.partial.html',
       controller: 'MovieListController'
     }).
     when('/movie/:id?', {
-      templateUrl: 'partial/movie-detail',
+      templateUrl: 'moviedetail.partial.html',
       controller: 'MovieDetailController'
     }).
     otherwise({

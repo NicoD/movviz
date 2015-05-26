@@ -1,0 +1,29 @@
+<div id="movie-list" class="row">
+  <div class="col-xs-10">
+    <article ng-show="movies.length">
+      <ul id="movie-list">
+        <li ng-repeat="movie in movies"> 
+          <div class="view">
+            <span>{{movie.title}} {{movie.year}}</span> 
+            <span>{{movie.rating}}</span> 
+            <span> 
+              <a href="/movie/{{movie._id}}">[+] more</a>
+            </span> 
+          </div>
+        </li>
+      </ul> 
+      
+      <pagination /> 
+    </article> 
+  </div> 
+  
+  <div class="form col-sm-2"> 
+    <form ng-submit="search()">
+      <div class="form-group">
+        <input type="text" class="form-control" ng-model="searchPatternForm" placeholder="Search" /> 
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Go!" />
+      </div>
+    </form>
+  </div>

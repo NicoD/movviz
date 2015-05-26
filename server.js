@@ -19,17 +19,25 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(cookieParser());
+
+
+////////////////////// STATIC & PARTIAL /////////////////////////
+
 app.use('/public', express.static(path.join(__dirname, 'public')));
 // only for dev purpose (sourceMap);
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
-
-
-// partial view are render through jade just for consistency
+// partial view may be rendered through jade
 app.get('/partial/:name?', function(req, res) {
-  console.log('partial/' + req.params.name);
   res.render('partial/' + req.params.name);
 });
+// render partial diretly from assets
+app.get('/\*partial\.html', function(req, res, next) {
+  res.sendFile(__dirname + '/assets/javascript' + req.originalUrl);
+});
+
+/////////////////////////////////////////////////////////////////
+
 
 
 app.get('/api/movies/:search/:page', function(req, res) {

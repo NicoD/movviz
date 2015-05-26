@@ -9,7 +9,7 @@
   function pagination() {
     return {
       restrict: 'E',
-      templateUrl: 'partial/pagination'
+      templateUrl: '/components/paginator/pagination.partial.html'
     };
   }
 }());
