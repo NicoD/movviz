@@ -2,20 +2,20 @@
   'use strict';
 
   describe('Testing routes', function() {
-  
+
     var $location,
-        $route, 
-        $rootScope,
-        $httpBackend;
+      $route,
+      $rootScope,
+      $httpBackend;
 
     beforeEach(function() {
       module('movvizApp');
 
       inject(function(_$location_, _$route_, _$rootScope_, _$httpBackend_) {
-        $location      = _$location_;
-        $route         = _$route_;
-        $rootScope     = _$rootScope_;
-        $httpBackend   = _$httpBackend_;
+        $location = _$location_;
+        $route = _$route_;
+        $rootScope = _$rootScope_;
+        $httpBackend = _$httpBackend_;
       });
     });
 
@@ -27,10 +27,10 @@
       expect($route.current.templateUrl).to.be.equals(expectedTemplate);
       return {
         then: function(path, nextExpectedController, nextExpectedTemplate) {
-          return testLocation(path, 
-                              nextExpectedController ? nextExpectedController : expectedController, 
-                              nextExpectedTemplate   ? nextExpectedTemplate   : expectedTemplate
-                             );
+          return testLocation(path,
+            nextExpectedController ? nextExpectedController : expectedController,
+            nextExpectedTemplate ? nextExpectedTemplate : expectedTemplate
+          );
         }
       };
     }
@@ -38,10 +38,10 @@
     it('should load the list as default', function() {
       $httpBackend.expectGET('movielist.partial.html').respond(200);
       testLocation('/', 'MovieListController', 'movielist.partial.html')
-          .then('/movies')
-          .then('/movies/56')
-          .then('/movies/test%20')
-          .then('/movies/test%56/16');
+        .then('/movies')
+        .then('/movies/56')
+        .then('/movies/test%20')
+        .then('/movies/test%56/16');
 
     });
 

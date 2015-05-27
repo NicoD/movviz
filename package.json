@@ -9,7 +9,8 @@
     "mongodb": "*",
     "sprintf-js": "~1.0.2",
     "express": "~4.12.3",
-    "jade": "~1.9.2"
+    "jade": "~1.9.2",
+    "async": "~1.0.0"
   },
   "engine": "node ~0.10",
   "devDependencies": {

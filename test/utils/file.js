@@ -4,6 +4,7 @@
 
 var assert = require('assert'),
   fs = require('fs'),
+  Promise = require('promise'),
   FileUtils = require('../../lib/utils/file');
 
 
@@ -17,6 +18,57 @@ describe('FileUtils', function() {
     });
   });
 
+  describe('RmDirR', function() {
+    it('should delete a folder and its children', function(done) {
+
+      var pCreateFolder = Promise.denodeify(fs.mkdir);
+
+      pCreateFolder('/tmp/test')
+        .then(pCreateFolder('/tmp/test/A'))
+        .then(pCreateFolder('/tmp/test/A/B'))
+        .then(pCreateFolder('/tmp/test/A/B/C'))
+        .then(pCreateFolder('/tmp/test/A/B/C2'))
+        .then(pCreateFolder('/tmp/test/A/B/C3'))
+        .then(pCreateFolder('/tmp/test/A/B/C/D'))
+        .then(pCreateFolder('/tmp/test/A/B/C3/D1'))
+        .then(pCreateFolder('/tmp/test/A/B/C3/D2'))
+        .then(function() {
+          FileUtils.rmdirR('/tmp/test', function(err) {
+            if(err) {
+              return done(err);
+            }
+            fs.exists('/tmp/test', function(exists) {
+              if(exists) {
+                return done(new Error('should not exist'));
+              }
+              done();
+            });
+          });
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
+  });
+
+  describe('MkDirP', function() {
+    it('should create a dir with its parents', function(done) {
+      var path = '/tmp/test/1/2/3/4/5/6/7';
+      FileUtils.mkdirP(path, parseInt('0777', 8), function(error) {
+        if(error) {
+          return done(error);
+        }
+
+        fs.exists(path, function(exists) {
+          if(!exists) {
+            return done(new Error('should exist'));
+          }
+          done();
+          FileUtils.rmdirR('/tmp/test/', function() {});
+        });
+      });
+    });
+  });
 
   describe('Download', function() {
     it('should download a file', function(done) {
