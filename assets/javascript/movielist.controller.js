@@ -5,9 +5,9 @@
     .module('movvizApp')
     .controller('MovieListController', MovieListController);
 
-  MovieListController.$inject = ['$scope', '$http', '$routeParams', 'paginatorFactory'];
+  MovieListController.$inject = ['$scope', '$http', '$routeParams', '$filter', 'paginatorFactory'];
 
-  function MovieListController($scope, $http, $routeParams, paginatorFactory) {
+  function MovieListController($scope, $http, $routeParams, $filter, paginatorFactory) {
 
     var self = this;
     var page = parseInt($routeParams.page, 10);
@@ -27,10 +27,10 @@
       page = page || 1;
       var target = '/movies/';
       if($scope.searchPattern) {
-        target += encodeURIComponent($scope.searchPattern) + '/';
+        target += $filter('encode')($scope.searchPattern, true) + '/';
       }
       if(page) {
-        target += page + '/';
+        target += page;
       }
       return target;
     });
@@ -39,7 +39,7 @@
     var movies = $scope.movies = [];
     var apiUrl = '/api/movies/';
     if($scope.searchPattern) {
-      apiUrl += encodeURIComponent($scope.searchPattern) + '/';
+      apiUrl += $filter('encode')($scope.searchPattern, true) + '/';
     }
     apiUrl += page;
 

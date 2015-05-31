@@ -21,9 +21,7 @@ module.exports = function(config) {
       'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js',
       'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.min.js',
       'node_modules/angular-mocks/angular-mocks.js',
-      'assets/javascript/app.js',
-      'assets/javascript/route.config.js',
-      'assets/javascript/**/*-spec.js'
+      'assets/javascript/**/*.js'
     ],
 
 
