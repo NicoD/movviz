@@ -1,0 +1,16 @@
+<div id="customlist-list" class="row">
+  <article ng-show="customlists.length">
+    <ul id="customlist-list">
+      <li ng-repeat="customlist in customlists"> 
+        <span>{{customlist.name}}</span>
+        <ul id="customlist-list-movie">
+          <li ng-repeat="elem in customlist.list">
+            <span>{{elem._id}}</span>
+            <span ng-if="customlist['list-format'] == 'avg'">{{elem.value.avg}}</span>
+            <span ng-if="customlist['list-format'] == 'count'">{{elem.value.count}}</span>
+          </li>
+        </ul>
+      </li>
+    </ul> 
+  </article>
+</div> 

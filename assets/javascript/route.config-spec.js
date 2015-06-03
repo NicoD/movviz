@@ -35,17 +35,21 @@
       };
     }
 
-    it('should load the list as default', function() {
+    it('should undestand correctly the home page', function() {
+      $httpBackend.expectGET('customlistlist.partial.html').respond(200);
+      testLocation('/', 'CustomlistListController', 'customlistlist.partial.html');
+    });
+
+    it('should undertand correcly movie lists', function() {
       $httpBackend.expectGET('movielist.partial.html').respond(200);
-      testLocation('/', 'MovieListController', 'movielist.partial.html')
-        .then('/movies')
+      testLocation('/movies', 'MovieListController', 'movielist.partial.html')
         .then('/movies/56')
         .then('/movies/test%20')
         .then('/movies/test%56/16');
 
     });
 
-    it('should find movie detail route', function() {
+    it('should understand correctly movie detail', function() {
       $httpBackend.expectGET('moviedetail.partial.html').respond(200);
       testLocation('/movie/123456', 'MovieDetailController', 'moviedetail.partial.html');
     });

@@ -68,7 +68,9 @@ module.exports = function(grunt) {
                                             'assets/javascript/route.config.js',
                                             'assets/javascript/movielist.controller.js',
                                             'assets/javascript/moviedetail.controller.js',
+                                            'assets/javascript/customlistlist.controller.js',
                                             'assets/javascript/components/utils/utils.directive.js',
+                                            'assets/javascript/components/utils/utils.filter.js',
                                             'assets/javascript/components/paginator/paginator.directive.js',
                                             'assets/javascript/components/paginator/paginator.service.js'
                                           ]
@@ -113,7 +115,7 @@ module.exports = function(grunt) {
         tasks: ['karma:unit:run']
       }, 
       js: {
-        files: ['<%= jshint.client.src %>', '<?= jshint.server.src %>'],
+        files: ['<%= jshint.client.src %>', '<%= jshint.server.src %>'],
         tasks: ['jshint']
       } 
     }

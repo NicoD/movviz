@@ -9,6 +9,10 @@
 
   function config($routeProvider) {
     $routeProvider.
+    when('/', {
+      templateUrl: 'customlistlist.partial.html',
+      controller: 'CustomlistListController'
+    }).
     when('/movies', {
       templateUrl: 'movielist.partial.html',
       controller: 'MovieListController'
