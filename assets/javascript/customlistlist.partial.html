@@ -1,16 +1,19 @@
-<div id="customlist-list" class="row">
+<div id="customlist-list" class="row row-soft-padding">
   <article ng-show="customlists.length">
-    <ul id="customlist-list">
-      <li ng-repeat="customlist in customlists"> 
-        <span>{{customlist.name}}</span>
-        <ul id="customlist-list-movie">
-          <li ng-repeat="elem in customlist.list">
-            <span>{{elem._id}}</span>
-            <span ng-if="customlist['list-format'] == 'avg'">{{elem.value.avg}}</span>
-            <span ng-if="customlist['list-format'] == 'count'">{{elem.value.count}}</span>
-          </li>
-        </ul>
-      </li>
-    </ul> 
+    <div ng-repeat="customlist in customlists" class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+      <div class="customlist">
+        <div class="content">
+          <h2>{{customlist.name | ucword}}</h2>
+          <hr />
+          <ul id="customlist-list-movie">
+            <li ng-repeat="elem in customlist.list">
+              <span>{{elem._id}}</span>
+              <span ng-if="customlist['list-format'] == 'avg'">{{elem.value.avg}}</span>
+              <span ng-if="customlist['list-format'] == 'count'">{{elem.value.count}}</span>
+            </li>
+          </ul>
+      </div>
+      </div>
+    </div>
   </article>
 </div> 
