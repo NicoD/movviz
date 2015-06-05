@@ -1,19 +1,16 @@
-<div class="pagination">
-  <ul>
+<nav>
+  <ul class="pagination pagination-sm" ng-if="paginator.totalPages > 1">
     <li ng-class="paginator.prevPageDisabled()" ng-click="paginator.goto()">
-      <a href="#" disabled-link>«« First</a>
-    </i>
-    <li ng-class="paginator.prevPageDisabled()" ng-click="paginator.goto(paginator.currentPage)">
-      <a href="#" disabled-link>« Prev</a>
+      <a href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
     </li>
     <li ng-repeat="n in paginator.range()" ng-class="{active: n == paginator.currentPage}" ng-click="paginator.goto(n+1)">
-      <a href="#" disabled-link> {{n+1}}</a>
+      <a href="#" disabled-link>{{n+1}}</a>
     </li>
     <li ng-class="paginator.nextPageDisabled()" ng-click="paginator.goto(paginator.currentPage+2)">
-      <a href="#" disabled-link>Next »</a>
-    </li>
-    <li ng-class="paginator.nextPageDisabled()" ng-click="paginator.goto(paginator.totalPages)">
-      <a href="#" disabled-link>Last »»</a>
+      <a href="#" arial-label="Next" disabled-link>
+          <span aria-hidden="true">&raquo;</a>
     </li>
   </ul>
-</div>
+</nav>

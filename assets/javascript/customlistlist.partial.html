@@ -1,20 +1,21 @@
 <div id="customlist-list" class="row row-soft-padding">
   <article ng-show="customlists.length">
     <div ng-repeat="customlist in customlists" class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-      <div class="customlist">
-        <div class="content">
-          <h2>{{customlist.name | ucword}}</h2>
+      <div class="customlist" ng-controller="CustomlistController">
+        <h2>{{customlist.name | ucword}}</h2>
 
-          <table class="table table-striped table-condensed">
-            <tr ng-repeat="elem in customlist.list">
-              <td>{{elem._id}}</td>
-              <td>
-                <span ng-if="customlist['list-format'] == 'avg'">{{elem.value.avg}}</span>
-                <span ng-if="customlist['list-format'] == 'count'">{{elem.value.count}}</span>
-              </td>
-            </tr>
-          </table>
-         </div>
+        <table class="table table-striped table-condensed">
+          <tr ng-repeat="elem in customlist.list.results">
+            <td>{{elem._id}}</td>
+            <td>
+              <span ng-if="customlist['list-format'] == 'avg'">{{elem.value.avg}}</span>
+              <span ng-if="customlist['list-format'] == 'count'">{{elem.value.count}}</span>
+            </td>
+          </tr>
+        </table>
+        <div class="pagination-container">
+          <pagination />
+        </div>
       </div>
     </div>
   </article>

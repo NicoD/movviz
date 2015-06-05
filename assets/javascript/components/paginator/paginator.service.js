@@ -10,10 +10,14 @@
 
   function paginatorFactory($location) {
     return {
-      create: function(urlBuilder) {
-        var paginator = new Paginator(urlBuilder);
+      create: function(urlBuilder, onClick) {
+        var paginator = new Paginator();
         paginator.goto = function(page) {
-          $location.path(urlBuilder(page));
+          if(urlBuilder) {
+            $location.path(urlBuilder(page));
+          } else if(onClick) {
+            onClick(page);
+          }
           return false;
         };
         return paginator;
@@ -24,6 +28,7 @@
   var Paginator = function() {
     this.currentPage = 0;
     this.totalPages = 0;
+    this.rangeSize = 10;
   };
 
   Paginator.prototype.prevPageDisabled = function() {
@@ -34,14 +39,12 @@
   };
 
   Paginator.prototype.range = function() {
-    var rangeSize = 10,
-      ret = [],
-      start = Math.max(0, Math.ceil(this.currentPage - rangeSize / 2)),
-      max = Math.min(this.totalPages, start + rangeSize);
-    for(var i = start; i < max; i++) {
+    var ret = [],
+        start = Math.max(0, Math.ceil(this.currentPage - this.rangeSize / 2)),
+        max = Math.min(this.totalPages, start + this.rangeSize);
+    for(var i=start; i<max; i++) {
       ret.push(i);
     }
     return ret;
   };
-
 }());

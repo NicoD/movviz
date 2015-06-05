@@ -46,7 +46,6 @@
     $http.get(apiUrl)
       .success(function(data, status, headers, config) {
         $scope.movies = data.movies;
-
         $scope.paginator.currentPage = data.pagination.currentPage;
         $scope.paginator.totalPages = data.pagination.totalPages;
       })
