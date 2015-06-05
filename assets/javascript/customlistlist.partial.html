@@ -4,15 +4,17 @@
       <div class="customlist">
         <div class="content">
           <h2>{{customlist.name | ucword}}</h2>
-          <hr />
-          <ul id="customlist-list-movie">
-            <li ng-repeat="elem in customlist.list">
-              <span>{{elem._id}}</span>
-              <span ng-if="customlist['list-format'] == 'avg'">{{elem.value.avg}}</span>
-              <span ng-if="customlist['list-format'] == 'count'">{{elem.value.count}}</span>
-            </li>
-          </ul>
-      </div>
+
+          <table class="table table-striped table-condensed">
+            <tr ng-repeat="elem in customlist.list">
+              <td>{{elem._id}}</td>
+              <td>
+                <span ng-if="customlist['list-format'] == 'avg'">{{elem.value.avg}}</span>
+                <span ng-if="customlist['list-format'] == 'count'">{{elem.value.count}}</span>
+              </td>
+            </tr>
+          </table>
+         </div>
       </div>
     </div>
   </article>

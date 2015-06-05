@@ -1,17 +1,29 @@
 @import "mixin";
 
-@brown:  #462E01;
-@dark:   #232323;
-@orange: #DC9103;
-@light:  #CCC;
+/* red */
+@color1: #D72229;
+@color1b: #FF2831;
 
-@listbackground: #FFFFFF;
+/* yellow */
+@color2: #FFFB42;
+
+/* blue */
+@color3: #1378B2;
+@color3b: #0C86CC;
+
+
 @listborder: #BDBDBD;
 @listtext: #212121;
-@listtitle: #BF360C;
+@listtitle: #d72229;
+@listbackground: #FFF;
+@pagebackground: @color3;
+
+
 
 body {
   margin-top:80px;
+  background-color: @pagebackground;
+  background-image: url('http://www.transparenttextures.com/patterns/bright-squares.png');
 }
 
 
@@ -33,49 +45,55 @@ body {
   }
 }
 
-div.pagination ul {
-  list-style-type: none;
+div.pagination {
+  ul {
+    list-style-type: none;
+  }
+  
+  li {
+    display: inline;
+    margin-left: 5px;
+    margin-right: 5px;
+
+    .disabled {
+      display: none;
+    }
+  }
 }
 
-div.pagination li.disabled {
-  display: none;
-}
-
-div.pagination li {
-  display: inline;
-  margin-left: 5px;
-  margin-right: 5px;
-}
-#movie-list .form {
-  display: block;
-}
-
-#movie-list .form form input[type='text'] {
-  width: 196px;
-}
-
-#customlist-list article > div {
+#movie-list {
+  .form {
+    display: block;
+    form input[type='text'] {
+      width: 196px;
+    }
+  }
 }
 
 #customlist-list article > div > div {
-  min-height: 450px;
+  min-height: 700px;
+
+  table tr td:first-child {
+    width: 100%;
+  }
 }
 
 div.customlist {
   border: 1px solid @listborder;
   background-color: @listbackground;
-  .box-shadow(2px 2px 3px 0px @listborder);
+  .box-shadow(3px 2px 0px 0px @listborder);
   .border-radius(5px);
   color: @listtext;
-}
-div.customlist > div {
-  margin: 5px;
-  line-height: 1.3;
-}
 
-div.customlist h2 {
-  font-size: 15px;
-  font-weight: bold;
-  color: @listtitle; 
-  text-align:center;
+  > div {
+    margin: 5px;
+    line-height: 1.3;
+  }
+
+  h2 {
+    font-size: 15px;
+    font-weight: bold;
+    color: @listtitle; 
+    text-align:center;
+  }
 }
