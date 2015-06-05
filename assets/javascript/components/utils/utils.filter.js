@@ -27,7 +27,7 @@
     return function ucwordFilter(input) {
       var words = input.split(" ");
       var nbWords = words.length;
-      for(var i=0; i<nbWords; i++) {
+      for(var i = 0; i < nbWords; i++) {
         words[i] = ucfirst()(words[i]);
       }
       return words.join(" ");
