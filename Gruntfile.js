@@ -56,6 +56,19 @@ module.exports = function(grunt) {
       }
     },
 
+    copy: { // client only
+      client: {
+        files: [
+          {
+            expand:true, 
+            cwd: 'assets/images/',
+            src: ['**/*.png'], 
+            dest: 'public/images'
+          }
+        ]
+      }
+    },
+
     uglify: { // client only
       options: {
         mangle: false,
@@ -63,17 +76,7 @@ module.exports = function(grunt) {
       },
       my_target: {
         files: {
-          'public/scripts/movviz.min.js': [
-                                            'assets/javascript/app.js', 
-                                            'assets/javascript/route.config.js',
-                                            'assets/javascript/movielist.controller.js',
-                                            'assets/javascript/moviedetail.controller.js',
-                                            'assets/javascript/customlistlist.controller.js',
-                                            'assets/javascript/components/utils/utils.directive.js',
-                                            'assets/javascript/components/utils/utils.filter.js',
-                                            'assets/javascript/components/paginator/paginator.directive.js',
-                                            'assets/javascript/components/paginator/paginator.service.js'
-                                          ]
+          'public/scripts/movviz.min.js': ['assets/javascript/**/*.js', '!assets/javascript/**/*-spec.js']
         }
       }
     },
@@ -121,7 +124,7 @@ module.exports = function(grunt) {
     }
   });
 
-
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-jsdoc');
@@ -133,6 +136,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('server', ['mochaTest', 'jsbeautifier', 'jshint:server']);
-  grunt.registerTask('client', ['karma:continuous', 'jsbeautifier', 'jshint:client',  'uglify', 'less']);
+  grunt.registerTask('client', ['karma:continuous', 'jsbeautifier', 'jshint:client',  'uglify', 'less', 'copy']);
   grunt.registerTask('default', ['server', 'client']);
 };
