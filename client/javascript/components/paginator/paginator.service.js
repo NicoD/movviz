@@ -40,9 +40,9 @@
 
   Paginator.prototype.range = function() {
     var ret = [],
-        start = Math.max(0, Math.ceil(this.currentPage - this.rangeSize / 2)),
-        max = Math.min(this.totalPages, start + this.rangeSize);
-    for(var i=start; i<max; i++) {
+      start = Math.max(0, Math.ceil(this.currentPage - this.rangeSize / 2)),
+      max = Math.min(this.totalPages, start + this.rangeSize);
+    for(var i = start; i < max; i++) {
       ret.push(i);
     }
     return ret;

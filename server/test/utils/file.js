@@ -5,7 +5,7 @@
 var assert = require('assert'),
   fs = require('fs'),
   Promise = require('promise'),
-  FileUtils = require('../../lib/utils/file');
+  FileUtils = require('../../src/utils/file');
 
 
 

@@ -4,8 +4,9 @@
  */
 'use strict';
 
-var movieRepositoryFactory = require('../../repository/movie'),
-  actionFactory = require('../../action/install');
+var movieRepFactory = require('../../../server/src/repository/movie'),
+    customlistRepFactory = require('../../../server/src/repository/customlist'),
+  actionFactory = require('../../../server/src/action/install');
 
 /**
  * Callback used when the action is build
@@ -27,10 +28,10 @@ exports.create = function(db, program, onBuild) {
     modules = program.modules.split(',');
   }
   if(modules.indexOf('movie') != -1) {
-    repositories.push(require('../../repository/movie').create(db));
+    repositories.push(movieRepFactory.create(db));
   }
   if(modules.indexOf('customlist') != -1) {
-    repositories.push(require('../../repository/customlist').create(db));
+    repositories.push(customlistRepFactory.create(db));
   }
   onBuild(null, actionFactory.create(repositories));
 };

@@ -4,14 +4,20 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     jshint: {
+      command: {
+        src: ['command/movviz.js'],
+        options: {
+          jshintrc: '.jshintrc'
+        }
+      },
       server: {
-        src: ['./movviz.js', 'server.js', 'lib/**/*.js', 'test/**/*.js'],
+        src: ['server/movviz.js', 'server/server.js', 'server/src/**/*.js', 'test/**/*.js'],
         options: {
           jshintrc: '.jshintrc' 
         }
       },
       client: {
-        src: ['assets/javascript/**/*.js'],
+        src: ['client/javascript/**/*.js'],
         options: {
           jshintrc: '.jshintrc' 
         }
@@ -19,14 +25,17 @@ module.exports = function(grunt) {
     },
 
     jsbeautifier: {
+      command: {
+        src: ['command/movviz.js']
+      },
       server: {
-        src: ['movviz.js', 'server.js', 'lib/**/*.js', 'test/**/*.js'],
+        src: ['server/server.js', 'server/src/**/*.js', 'server/test/**/*.js'],
         options: {
           config: ".jsbeautifyrc"
         }
       },
       client: {
-        src: ['assets/javascript/**/*.js'],
+        src: ['client/javascript/**/*.js'],
         options: {
           config: ".jsbeautifyrc"
         }
@@ -35,9 +44,9 @@ module.exports = function(grunt) {
 
     jsdoc: { 
       server: {
-        src: ['lib/**/*.js'],
+        src: ['server/src/**/*.js'],
         options: {
-          destination: 'doc',
+          destination: 'server/doc',
           template:    'node_modules/grunt-jsdoc/node_modules/ink-docstrap/template',
           configure:   'node_modules/grunt-jsdoc/node_modules/ink-docstrap/template/jsdoc.conf.json'
         }
@@ -51,7 +60,7 @@ module.exports = function(grunt) {
           optimization: 2
         },
         files: {
-          'public/css/main.css': 'assets/less/main.less'
+          'public/css/main.css': 'client/less/main.less'
         }
       }
     },
@@ -61,7 +70,7 @@ module.exports = function(grunt) {
         files: [
           {
             expand:true, 
-            cwd: 'assets/images/',
+            cwd: 'client/images/',
             src: ['**/*.png'], 
             dest: 'public/images'
           }
@@ -76,15 +85,15 @@ module.exports = function(grunt) {
       },
       my_target: {
         files: {
-          'public/scripts/movviz.min.js': ['assets/javascript/**/*.js', '!assets/javascript/**/*-spec.js']
+          'public/scripts/movviz.min.js': ['client/javascript/**/*.js', '!client/javascript/**/*-spec.js']
         }
       }
     },
 
 
-    mochaTest: { // server only
+    mochaTest: { // server & command only
       test: {
-        src: ['test/**/*.js'],
+        src: ['server/test/**/*.js', 'command/test/**/*.js'],
       }
     },
 
@@ -103,18 +112,18 @@ module.exports = function(grunt) {
 
     watch: {
       styles: {
-        files: ['assets/less/**/*.less'],
+        files: ['client/less/**/*.less'],
         tasks: ['less'],
         options: {
           nospawn: true
         }
       },
       jsClient: {
-        files: ['assets/javascript/**/*.js'],
+        files: ['client/javascript/**/*.js'],
         tasks: ['uglify']
       },
       karma: {
-        files: ['assets/javascript/**/*.js'],
+        files: ['client/javascript/**/*.js'],
         tasks: ['karma:unit:run']
       }, 
       js: {
@@ -135,7 +144,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('server', ['mochaTest', 'jsbeautifier', 'jshint:server']);
-  grunt.registerTask('client', ['karma:continuous', 'jsbeautifier', 'jshint:client',  'uglify', 'less', 'copy']);
+  grunt.registerTask('command', ['jshint:command', 'jsbeautfier:command']);
+  grunt.registerTask('server', ['mochaTest', 'jsbeautifier:server', 'jshint:server']);
+  grunt.registerTask('client', ['karma:continuous', 'jsbeautifier:client', 'jshint:client',  'uglify', 'less', 'copy']);
   grunt.registerTask('default', ['server', 'client']);
 };

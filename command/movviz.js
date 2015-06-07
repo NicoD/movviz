@@ -2,8 +2,8 @@
 
 try {
   // loader the router that will build the action according to the command line
-  var router = require('./lib/command/router').create(process.argv),
-    logger = require('./lib/utils/logger').Logger;
+  var router = require('./src/router').create(process.argv),
+    logger = require('../server/src/utils/logger').Logger;
 
   router.get(function(err, action) {
     if(err) {

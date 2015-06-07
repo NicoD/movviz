@@ -5,11 +5,11 @@
 'use strict';
 
 
-var mydb = require('../db'),
+var mydb = require('../../server/src/db'),
   Command = require('commander').Command,
   util = require('util'),
   actionBuilderFactory = require('./builderFactory'),
-  logger = require('../utils/logger').Logger;
+  logger = require('../../server/src/utils/logger').Logger;
 
 
 /**

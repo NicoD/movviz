@@ -1,3 +1,4 @@
 node_modules/
-mongodb/
-config/*.yaml
+var/
+server/config/*.yaml
+command/congig/*.yaml

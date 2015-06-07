@@ -6,9 +6,9 @@
 
 var readline = require('readline'),
   events = require('events'),
-  movieRepositoryFactory = require('../../repository/movie'),
-  movieCriteriaRepositoryFactory = require('../../repository/movie/criteria'),
-  actionFactory = require('../../action/list');
+  movieRepositoryFactory = require('../../../server/src/repository/movie'),
+  movieCriteriaRepositoryFactory = require('../../../server/src/repository/movie/criteria'),
+  actionFactory = require('../../../server/src/action/list');
 
 
 /**

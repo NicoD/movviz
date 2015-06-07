@@ -4,11 +4,11 @@ var express = require('express'),
   path = require('path'),
   bodyParser = require('body-parser'),
   cookieParser = require('cookie-parser'),
-  paginationFactory = require('./lib/utils/pagination'),
-  movieRepFactory = require('./lib/repository/movie'),
-  movieCriteriaRepFactory = require('./lib/repository/movie/criteria'),
-  customlistRepFactory = require('./lib/repository/customlist'),
-  mydb = require('./lib/db');
+  paginationFactory = require('./src/utils/pagination'),
+  movieRepFactory = require('./src/repository/movie'),
+  movieCriteriaRepFactory = require('./src/repository/movie/criteria'),
+  customlistRepFactory = require('./src/repository/customlist'),
+  mydb = require('./src/db');
 
 var app = express();
 
@@ -24,9 +24,9 @@ app.use(cookieParser());
 
 ////////////////////// STATIC & PARTIAL /////////////////////////
 
-app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, '../public')));
 // only for dev purpose (sourceMap);
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
+app.use('/app', express.static(path.join(__dirname, 'client')));
 
 // partial view may be rendered through jade
 app.get('/partial/:name?', function(req, res) {
@@ -34,7 +34,7 @@ app.get('/partial/:name?', function(req, res) {
 });
 // render partial diretly from assets
 app.get('/\*partial\.html', function(req, res, next) {
-  res.sendFile(__dirname + '/assets/javascript' + req.originalUrl);
+  res.sendFile(path.resolve(__dirname + '/../client/javascript' + req.originalUrl));
 });
 
 /////////////////////////////////////////////////////////////////
@@ -66,7 +66,7 @@ var sendMovieList = function(req, res, criteria) {
       pagination: pagination,
       movies: []
     };
-    var action = require('./lib/action/list').create(
+    var action = require('./src/action/list').create(
       criteria,
       pagination,
       movieRepFactory.create(db)
@@ -95,7 +95,7 @@ app.get('/api/movie/:id?', function(req, res) {
       throw err;
     }
     // @TODO direct call
-    var action = require('./lib/action/detail').create(req.params.id, movieRepFactory.create(db));
+    var action = require('./src/action/detail').create(req.params.id, movieRepFactory.create(db));
     action.process(function(err, result) {
       res.send(result);
     });
@@ -108,9 +108,13 @@ var setCustomlistResult = function(movieRep, customlist, pagination, onFilled) {
     results: []
   };
   movieRep.getAggregatedResults(customlist, pagination, function(err, aggResults) {
-    if(err) { return onFilled(err); }
+    if(err) {
+      return onFilled(err);
+    }
     aggResults.toArray(function(err, arr) {
-      if(err) { return onFilled(err); }
+      if(err) {
+        return onFilled(err);
+      }
       customlist.list.results = arr;
       onFilled();
     });
@@ -120,15 +124,21 @@ var setCustomlistResult = function(movieRep, customlist, pagination, onFilled) {
 
 app.get('/api/customlist/:slug/:page', function(req, res) {
   mydb.connect(function(err, db) {
-    if(err) { throw err; }
+    if(err) {
+      throw err;
+    }
     var resultsPerPage = 15;
     var pagination = paginationFactory.create(req.params.page ? parseInt(req.params.page, 10) : 0, resultsPerPage);
     var movieRep = movieRepFactory.create(db);
     var customlistRep = customlistRepFactory.create(db);
     customlistRep.getBySlug(req.params.slug, function(err, result) {
-      if(err) { throw err; }
+      if(err) {
+        throw err;
+      }
       setCustomlistResult(movieRep, result, pagination, function(err) {
-        if(err) { throw err; }
+        if(err) {
+          throw err;
+        }
         res.send(result);
       });
     });
@@ -140,12 +150,12 @@ app.get('/api/customlists/results', function(req, res) {
     if(err) {
       throw err;
     }
-    
-    var action = require('./lib/action/list').create({}, {}, customlistRepFactory.create(db));
+
+    var action = require('./src/action/list').create({}, {}, customlistRepFactory.create(db));
     action.on('process-done', function() {
       res.send(results);
     });
-    
+
     // pagination concern ONLY the results, not pagination is supported for the lists (too few)
     // when getting ALL the results, only first page is supports
     var resultsPerPage = 15;
@@ -164,7 +174,9 @@ app.get('/api/customlists/results', function(req, res) {
           results: []
         };
         setCustomlistResult(movieRep, obj, pagination, function(err) {
-          if(err) { throw err; }
+          if(err) {
+            throw err;
+          }
           iterator.next(iterate);
         });
       };

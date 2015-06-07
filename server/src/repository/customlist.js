@@ -108,7 +108,9 @@ var movieAggregationRepFactory = require('./movie/aggregation'),
      * @param {module:respository/customlist~Repository~onFound}
      */
     this.getBySlug = function(slug, onFound) {
-      collection.findOne({slug: slug}, onFound);
+      collection.findOne({
+        slug: slug
+      }, onFound);
     };
 
   };

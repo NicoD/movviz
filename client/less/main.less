@@ -32,7 +32,12 @@ body {
   #navbar-collapse > ul li {
     margin-left: 100px;
   }
+}
 
+.pagination > .active > a {
+  color: #FFF;
+  background-color: @color3b;
+  border-color: @color3b;
 }
 
 .row-soft-padding { 
@@ -45,22 +50,6 @@ body {
   }
 }
 
-div.pagination {
-  ul {
-    list-style-type: none;
-  }
-  
-  li {
-    display: inline;
-    margin-left: 5px;
-    margin-right: 5px;
-
-    &.disabled {
-      display: none;
-    }
-  }
-}
-
 #movie-list {
   .form {
     display: block;
@@ -69,6 +58,7 @@ div.pagination {
     }
   }
 }
+
 
 #customlist-list article > div > div {
   min-height: 610px;

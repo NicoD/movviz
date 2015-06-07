@@ -4,9 +4,9 @@
  */
 'use strict';
 
-var fileUtil = require('../../utils/file'),
-  movieRepositoryFactory = require('../../repository/movie'),
-  actionFactory = require('../../action/import');
+var fileUtil = require('../../../server/src/utils/file'),
+  movieRepositoryFactory = require('../../../server/src/repository/movie'),
+  actionFactory = require('../../../server/src/action/import');
 
 
 /**

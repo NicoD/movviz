@@ -194,7 +194,7 @@ var ObjectID = require('mongodb').ObjectID,
               };
             }
             results = results.find(filter)
-                             .sort(JSON.parse(list.sort));
+              .sort(JSON.parse(list.sort));
             if(!pagination || !pagination.applyTo) {
               return callback(null, results);
             }
