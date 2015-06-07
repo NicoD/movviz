@@ -9,6 +9,7 @@
     "__dirname" : true,
     "__dirfilename": true,
     "describe": true,
+    "before": true,
     "it"     : true,
     "process": true
   }
