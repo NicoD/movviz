@@ -28,16 +28,18 @@ var logger = require('../utils/logger').Logger,
  * @param {Number} totalResults
  */
 Pagination.prototype.applyTo = function(results, totalResults) {
+
   logger.log('info', 'apply pagination (%d, %d) to %d results', this.page, this.resultsPerPage, totalResults);
+
+  this.totalResults = totalResults;
   if(this.resultsPerPage) {
-    if(totalResults) {
-      this.totalResults = totalResults;
-      this.totalPages = Math.ceil(totalResults / this.resultsPerPage);
-    }
-    if(this.page) {
+    this.totalPages = Math.ceil(totalResults / this.resultsPerPage);
+    if(this.page && this.totalResults) {
       results.skip(this.page * this.resultsPerPage);
     }
-    results.limit(this.resultsPerPage);
+    if(this.totalResults > this.resultsPerPage) {
+      results.limit(this.resultsPerPage);
+    }
   }
 };
 

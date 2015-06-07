@@ -5,11 +5,12 @@
 var assert = require('assert'),
   fs = require('fs'),
   Promise = require('promise'),
-  FileUtils = require('../../src/utils/file');
+  FileUtils = require('../../src/utils/file'),
+  logger = require('../../src/utils/logger').Logger;
 
+logger.level = 'error';
 
-
-describe('FileUtils', function() {
+describe('server/src/utils/file', function() {
 
   describe('Misc', function() {
     it('should generate a deterministic file name', function() {

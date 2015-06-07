@@ -1,8 +1,8 @@
 'use strict';
 
 var express = require('express'),
-    fs = require('fs'),
-    logger = require('./src/utils/logger').Logger,
+  fs = require('fs'),
+  logger = require('./src/utils/logger').Logger,
   bodyParser = require('body-parser'),
   cookieParser = require('cookie-parser');
 
@@ -21,7 +21,7 @@ app.use(cookieParser());
 require('./routes.js')(app);
 
 // controller configuration
-fs.readdirSync('./src/controller').forEach(function (file) {
+fs.readdirSync('./src/controller').forEach(function(file) {
   if(file.substr(-3) == '.js') {
     logger.log('info', 'loading controller ' + file);
     require('./src/controller/' + file)(app);

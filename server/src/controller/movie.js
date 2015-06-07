@@ -2,10 +2,10 @@
 
 
 var movieCriteriaRepFactory = require('../repository/movie/criteria'),
-    movieRepFactory = require('../repository/movie'),
-    mydb = require('../db'),
-    paginationFactory = require('../utils/pagination'),
-    listAction = require('../action/list');
+  movieRepFactory = require('../repository/movie'),
+  mydb = require('../db'),
+  paginationFactory = require('../utils/pagination'),
+  listAction = require('../action/list');
 
 module.exports = function(app) {
 
@@ -20,7 +20,7 @@ module.exports = function(app) {
     sendMovieList(req, res, criteria);
   });
 
-  
+
   /**
    * list movies API
    */
@@ -28,7 +28,7 @@ module.exports = function(app) {
     sendMovieList(req, res);
   });
 
-  
+
   /**
    * movie detail API
    */
@@ -38,7 +38,9 @@ module.exports = function(app) {
         throw err;
       }
       movieRepFactory.create(db).getById(req.params.id, function(err, result) {
-        if(err) { throw err; }
+        if(err) {
+          throw err;
+        }
         res.send(result);
       });
     });

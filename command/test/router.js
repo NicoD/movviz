@@ -5,7 +5,7 @@ var assert = require('assert'),
   db = require('../../server/src/db');
 
 
-describe('Command', function() {
+describe('command/src/router', function() {
 
   db.setConfigFileName(__dirname + '/../config/database.test.yaml');
 
@@ -15,7 +15,7 @@ describe('Command', function() {
 
 
   it('should build an import action', function(done) {
-    routerFactory.create(getArgv('nodejs movviz --cmd import -v -s \'/tmp/test.csv\''))
+    routerFactory.create(getArgv('nodejs movviz --cmd import -s \'/tmp/test.csv\''))
       .get(function(err, obj) {
         if(err) {
           throw err;

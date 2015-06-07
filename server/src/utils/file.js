@@ -115,7 +115,7 @@ module.exports.rmdirR = rmdirR;
  * @param {module:utils/file~onMkdir}
  */
 var mkdirP = function(dirPath, mode, callback) {
-  path.exists(dirPath, function(exists) {
+  fs.exists(dirPath, function(exists) {
     if(exists) {
       return callback();
     }

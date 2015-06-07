@@ -1,10 +1,10 @@
 'use strict';
 
 var customlistRepFactory = require('../repository/customlist'),
-    movieRepFactory = require('../repository/movie'),
-    mydb = require('../db'),
-    paginationFactory = require('../utils/pagination'),
-    listAction = require('../action/list');
+  movieRepFactory = require('../repository/movie'),
+  mydb = require('../db'),
+  paginationFactory = require('../utils/pagination'),
+  listAction = require('../action/list');
 
 module.exports = function(app) {
 
@@ -75,8 +75,8 @@ module.exports = function(app) {
       });
     });
   });
-    
-  
+
+
   /**
    * helper method that apply cutomlist results to a custom list
    * @param {Object} movieRep
