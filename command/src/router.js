@@ -31,12 +31,11 @@ var CommandRouter = function(argv) {
   // command line form description
   program.version('1.0.0')
     .description('import a list')
-    .option('-c, --cmd [cmd]', 'Command', /^(import|list|install|detail)$/i)
+    .option('-c, --cmd [cmd]', 'Command', /^(import|list|install)$/i)
     .option('-s, --source [source]', 'source (url or path) [import]}')
     .option('-v, --verbose', 'verbose mode')
     .option('-l, --lines [value]', 'Line number to display per page [list]', parseInt)
     .option('--criteria [value]', 'search criteria [list]')
-    .option('--movieid [value]', 'id of the movie [detail]')
     .option('--modules [value]', 'comma separated modules  [install]');
 
   // command line help callback
