@@ -19,7 +19,6 @@ try {
 
 
 } catch(e) {
-
   console.log(String(e));
   console.trace();
 }

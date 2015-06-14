@@ -8,14 +8,14 @@
 var path = require('path'),
   yaml = require('js-yaml'),
   fs = require('fs'),
-  MongoClient = require('mongodb').MongoClient;
+  mongoose = require('mongoose');
 
 
 /**
  * Callback used when the database is connected
  * @callback module:db~onConnected
  * @param {String} err
- * @param {Object} connection - (mongodb) connection
+ * @param {Object} connection - (mongoose) connection
  */
 
 var configFile = path.dirname(require.main.filename) + '/config/database.yaml';
@@ -35,7 +35,7 @@ module.exports.setConfigFileName = function(fileName) {
  *
  * @param {module:db~onConnected}
  */
-module.exports.connect = function(onConnected) {
+ module.exports.connect = function(onConnected) {
 
   fs.readFile(configFile, function(err, data) {
     if(err) {
@@ -44,6 +44,11 @@ module.exports.connect = function(onConnected) {
 
     var doc = yaml.safeLoad(data),
       line = 'mongodb://' + doc.host + ':' + doc.port + '/' + doc.database;
-    MongoClient.connect(line, onConnected);
+    try {
+      onConnected(err, mongoose.createConnection(line));
+    } catch(e) {
+      onConnected(e);
+    }
+
   });
 };

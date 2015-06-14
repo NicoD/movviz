@@ -1,9 +1,9 @@
 'use strict';
 
 var assert = require('assert'),
-    sinon = require('sinon'),
-    dbUtils = require('../../src/utils/db'),
-    logger = require('../../src/utils/logger').Logger;
+  sinon = require('sinon'),
+  dbUtils = require('../../src/utils/db'),
+  logger = require('../../src/utils/logger').Logger;
 
 logger.level = 'error';
 
@@ -13,23 +13,29 @@ describe('server/src/utils/db', function() {
   before(function() {
     dbStub = {
       listCollections: function() {
-        var ret =  [{name: 'mycol1'}, {name: 'mycol2'}],
-            ix = 0;
+        var ret = [{
+            name: 'mycol1'
+          }, {
+            name: 'mycol2'
+          }],
+          ix = 0;
 
-        return { 
-          nextObject:function(cb) {
+        return {
+          nextObject: function(cb) {
             return cb(null, (ix >= ret.length) ? null : ret[ix++]);
           }
         };
       },
       collection: function() {
         return {
-          drop: function(cb) { cb(); }
+          drop: function(cb) {
+            cb();
+          }
         };
       }
     };
   });
-  
+
   describe('collectionExists', function() {
 
     it("collection exists", function() {
@@ -46,21 +52,21 @@ describe('server/src/utils/db', function() {
     it("collection not exists", function() {
       var cb = sinon.spy();
       dbUtils.collectionExists(dbStub, 'mycol3', cb);
-      assert(cb.calledWith(null, false)); 
+      assert(cb.calledWith(null, false));
     });
   });
 
   describe('dropIfExists', function() {
-      
+
     it("colleciton exists", function() {
       var cb = sinon.spy();
-      dbUtils.dropIfExists(dbStub, 'mycol2', cb); 
+      dbUtils.dropIfExists(dbStub, 'mycol2', cb);
       assert(cb.calledOnce);
     });
 
     it("collection not exists", function() {
       var cb = sinon.spy();
-      dbUtils.dropIfExists(dbStub, 'mycol3', cb); 
+      dbUtils.dropIfExists(dbStub, 'mycol3', cb);
       assert(cb.calledOnce);
     });
   });

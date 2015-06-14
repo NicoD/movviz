@@ -30,26 +30,25 @@ var fs = require('fs'),
      * @return {Object} cleaned result
      */
     var cleanRawResult = function(data) {
-      /*jshint -W069 */
       var res = {
-        title: data['Title'],
-        watched_at: Date.parse(data['created']),
+        title: data[5],
+        watched_at: Date.parse(data[2]),
         genres: [],
         directors: [],
-        rating: parseInt(data['You rated'], 10),
-        runtime: parseInt(data['Runtime (mins)'], 10),
-        year: parseInt(data['Year'], 10),
+        rating: parseInt(data[8], 10),
+        runtime: parseInt(data[10], 10),
+        year: parseInt(data[11], 10),
         imdb: {
-          _id: data['const'],
-          url: data['URL'],
-          rating: parseInt(data['IMDb Rating'], 10),
+          _id: data[1],
+          url: data[15],
+          rating: parseInt(data[9], 10),
         }
       };
-      var directors = data['Directors'].split(/[\s,]+/);
+      var directors = data[7].split(/[\s,]+/);
       directors.forEach(function(elem) {
         res.directors.push({name: elem});
       });
-      var genres = data['Genres'].split(/[\s,]+/);
+      var genres = data[12].split(/[\s,]+/);
       genres.forEach(function(genre) {
         res.genres.push({label: genre});
       });
