@@ -8,10 +8,11 @@ try {
   router.get(function(err, action) {
     if(err) {
       logger.log('error', String(err));
-      return;
+      throw err;
     }
     action.on('error', function(err) {
       logger.log('error', String(err));
+      throw err;
     });
 
     action.process();

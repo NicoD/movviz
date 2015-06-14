@@ -1,124 +1,98 @@
 /**
- * custom list repository module
- * @module repository/customlist
+ * customlist model module
+ * @module model/customlist
  */
 'use strict';
 
-var movieAggregationRepFactory = require('./movie/aggregation'),
+var mongoose = require('mongoose'),
+    Schema = mongoose.Schema,
+  AggregationModel = require('./movie/aggregation'),
   async = require('async'),
-  dbUtil = require('../utils/db'),
-  ObjectID = require('mongodb').ObjectID,
-
-  /**
-   * CustomListRepository
-   * centralize data access
-   *
-   * @class
-   * @param {Object} MongoDb access
-   */
-  Repository = function(storage) {
+  StringUtil = require('../utils/string');
 
 
-    /**
-     * Callback used when result is ready
-     * @callback module:repository/customlistmovie~Repository~onFound
-     * @param {String} err
-     * @param {Object} result
-     */
 
-    var collection = storage.collection('customlist');
-
-    /**
-     * prepare the storage
-     * doc example:
-     *  {
-     *    _id:ObjectId("507f1f77bcf86cd799439011")
-     *    name: "my list",
-     *    slug: "my-list",
-     *    list-type: "aggregation",
-     *    list-name: "best-directors",
-     *  }
-     */
-    this.install = function(onInstalled) {
-      dbUtil.dropIfExists(storage, 'customlist', function(err) {
-        if(err) {
-          return onInstalled(err);
-        }
-
-        var defaultAggregationLists = [
-          ['directors', ['best-directors', 'worst-directors', 'directors-per-movie-seen']],
-          ['periods', ['best-periods', 'worst-periods', 'watched-periods']]
-        ];
-
-        async.each(defaultAggregationLists, function(listCategory, callbackListCategory) {
-            async.each(listCategory[1], function(list, callbackList) {
-              var listPath = listCategory[0] + ':' + list;
-              var listDetail = movieAggregationRepFactory.get(listPath);
-              collection.insert({
-                  'name': listDetail.name,
-                  'slug': list,
-                  'list-type': "aggregation",
-                  'list-name': listPath
-                },
-                callbackList
-              );
-            }, callbackListCategory);
-          },
+var CustomlistSchema = new Schema({
+  slug: {type: String, index: true},
+  name: String,
+  'list-type': {type: String, enum: ['aggregation']},
+  'list-name': String
+}, { collection: 'customlist'});
 
 
-          function(err) {
-            if(err) {
-              return err; 
-            }
-            collection.createIndex({
-              "slug": 1
-            }, {
-              unique: 1
-            }, function(err) {
-              return onInstalled(err);
-            });
-          });
-      });
-    };
+CustomlistSchema.pre('save', function(next) {
+  this.slug = StringUtil.slugify(this.name);
+  next();
+});
 
-
-    /**
-     * return all the results
-     * @param {Object} criteria - search criteria
-     * @param {module:utils/pagination~Pagination} pagination
-     * @param {module:repository/customlist~Repository~onFound}
-     */
-    this.find = function(criteria, pagination, onFound) {
-      var results = collection.find(criteria);
-      if(!pagination || !pagination.applyTo) {
-        return onFound(null, results);
-      }
-      results.count(function(err, count) {
-        if(err) {
-          return onFound(err);
-        }
-        pagination.applyTo(results, count);
-        onFound(null, results);
-      });
-    };
-
-    /**
-     * return one results by its slug
-     * @param {String} slug
-     * @param {module:respository/customlist~Repository~onFound}
-     */
-    this.getBySlug = function(slug, onFound) {
-      collection.findOne({
-        slug: slug
-      }, onFound);
-    };
-
-  };
 
 /**
- * Customlisti repository factory
- * @return {module:respository/customlist~Repository}
+ * return all the results
+ * @param {Object} criteria - search criteria
+ * @param {Object} pagination
+ * @param {callback}
  */
-module.exports.create = function(storage) {
-  return new Repository(storage);
+CustomlistSchema.statics.getResults = function(criteria, pagination, cb) {
+  var query = this.find(criteria);
+  if(!pagination || !pagination.applyTo) {
+    return query.exec(cb);
+  }
+  query.count(function(err, count) {
+    if(err) {
+      return cb(err);
+    }
+    pagination.applyTo(query, count);
+    query.exec(cb);
+  });
+};
+
+
+/**
+ * return one results by its slug
+ * @param {String} slug
+ * @param {callback}
+ */
+CustomlistSchema.statics.getBySlug = function(slug, cb) {
+  this.findOne({slug: slug}, cb);
+};
+
+
+/**
+ * Customlist model factory
+ * @param {Object}
+ * @return {Object}
+ */
+module.exports.create = function(conn) {
+  return conn.model('Customlist', CustomlistSchema);
+};
+
+/**
+ * installation of the Customlist
+ * @param {Object}
+ * @param {callback}
+ */
+module.exports.install = function(conn, cb) {
+  var CustomlistModel = conn.model('Customlist', CustomlistSchema);
+  CustomlistModel.remove({}, function(err) {
+    if(err) {
+      return cb(err);
+    }
+
+    var defaultAggregationLists = [
+      ['directors', ['best-directors', 'worst-directors', 'directors-per-movie-seen']],
+      ['periods', ['best-periods', 'worst-periods', 'watched-periods']]
+    ];
+
+    async.each(defaultAggregationLists, function(listCategory, callbackListCategory) {
+      async.each(listCategory[1], function(list, callbackList) {
+          var listPath = listCategory[0] + ':' + list;
+          var listDetail = AggregationModel.get(listPath);
+          new CustomlistModel({
+              'name': listDetail.name,
+              'list-type': "aggregation",
+              'list-name': listPath
+            }).save(callbackList);
+          }, callbackListCategory);
+      }, cb);
+  });
 };

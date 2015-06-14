@@ -2,7 +2,6 @@
 
 /* global emit */
 
-var dbUtil = require('../../utils/db');
 
 var aggregation = {
   'directors': {
@@ -10,62 +9,52 @@ var aggregation = {
     'description': 'general aggregation per directors',
     'mapReduce': function(movieRep, callback) {
       var tmpCollectionName = 'tmp_directors';
-      dbUtil.collectionExists(movieRep.getStorage(), tmpCollectionName, function(err, exists) {
-        if(err) {
-          return callback(err);
-        }
-        if(exists) {
+      movieRep.getCollection().mapReduce(
+        // map
+        function() {
+          for(var idx = 0; idx < this.directors.length; idx++) {
+            var key = this.directors[idx].name;
+            if(!key) {
+              continue;
+            }
+            var value = {
+              count: 1,
+              total: parseInt(this.rating)
+            };
+            emit(key, value);
+          }
+        },
+        // reduce
+        function(key, values) {
+          var reducedVal = {
+            count: 0,
+            total: 0
+          };
+          for(var idx = 0; idx < values.length; idx++) {
+            reducedVal.count += values[idx].count;
+            reducedVal.total += values[idx].total;
+          }
+          return reducedVal;
+        },
+        // options
+        {
+          query: {},
+          out: tmpCollectionName,
+          finalize: function(key, reducedVal) {
+            reducedVal.avg = reducedVal.total / reducedVal.count;
+            reducedVal.avg = Math.round(reducedVal.avg * 100) / 100;
+            return reducedVal;
+          }
+        },
+        // callback
+        function(err) {
+          if(err) {
+            return callback(err);
+          }
           callback(null, movieRep.getStorage()
             .collection(tmpCollectionName));
-        } else {
-          movieRep.getCollection().mapReduce(
-            // map
-            function() {
-              for(var idx = 0; idx < this.directors.length; idx++) {
-                var key = this.directors[idx].name;
-                if(!key) {
-                  continue;
-                }
-                var value = {
-                  count: 1,
-                  total: parseInt(this.rating)
-                };
-                emit(key, value);
-              }
-            },
-            // reduce
-            function(key, values) {
-              var reducedVal = {
-                count: 0,
-                total: 0
-              };
-              for(var idx = 0; idx < values.length; idx++) {
-                reducedVal.count += values[idx].count;
-                reducedVal.total += values[idx].total;
-              }
-              return reducedVal;
-            },
-            // options
-            {
-              query: {},
-              out: tmpCollectionName,
-              finalize: function(key, reducedVal) {
-                reducedVal.avg = reducedVal.total / reducedVal.count;
-                reducedVal.avg = Math.round(reducedVal.avg * 100) / 100;
-                return reducedVal;
-              }
-            },
-            // callback
-            function(err) {
-              if(err) {
-                return callback(err);
-              }
-              callback(null, movieRep.getStorage()
-                .collection(tmpCollectionName));
-            }
-          );
         }
-      });
+      );
     },
     'lists': {
       'best-directors': {
@@ -91,59 +80,49 @@ var aggregation = {
     'description': 'general aggregation per period',
     'mapReduce': function(movieRep, callback) {
       var tmpCollectionName = 'tmp_periods';
-      dbUtil.collectionExists(movieRep.getStorage(), tmpCollectionName, function(err, exists) {
-        if(err) {
-          return callback(err);
-        }
-        if(exists) {
+      movieRep.getCollection().mapReduce(
+        // map
+        function() {
+          if(!this.year) {
+            return;
+          }
+          var period = this.year - this.year % 10;
+          var value = {
+            count: 1,
+            total: parseInt(this.rating)
+          };
+          emit(period, value);
+        },
+        // reduce
+        function(key, values) {
+          var reducedVal = {
+            count: 0,
+            total: 0
+          };
+          for(var idx = 0; idx < values.length; idx++) {
+            reducedVal.count += values[idx].count;
+            reducedVal.total += values[idx].total;
+          }
+          return reducedVal;
+        },
+        // options
+        {
+          query: {},
+          out: tmpCollectionName,
+          finalize: function(key, reducedVal) {
+            reducedVal.avg = reducedVal.total / reducedVal.count;
+            reducedVal.avg = Math.round(reducedVal.avg * 100) / 100;
+            return reducedVal;
+          }
+        },
+        function(err) {
+          if(err) {
+            return callback(err);
+          }
           callback(null, movieRep.getStorage()
             .collection(tmpCollectionName));
-        } else {
-          movieRep.getCollection().mapReduce(
-            // map
-            function() {
-              if(!this.year) {
-                return;
-              }
-              var period = this.year - this.year % 10;
-              var value = {
-                count: 1,
-                total: parseInt(this.rating)
-              };
-              emit(period, value);
-            },
-            // reduce
-            function(key, values) {
-              var reducedVal = {
-                count: 0,
-                total: 0
-              };
-              for(var idx = 0; idx < values.length; idx++) {
-                reducedVal.count += values[idx].count;
-                reducedVal.total += values[idx].total;
-              }
-              return reducedVal;
-            },
-            // options
-            {
-              query: {},
-              out: tmpCollectionName,
-              finalize: function(key, reducedVal) {
-                reducedVal.avg = reducedVal.total / reducedVal.count;
-                reducedVal.avg = Math.round(reducedVal.avg * 100) / 100;
-                return reducedVal;
-              }
-            },
-            function(err) {
-              if(err) {
-                return callback(err);
-              }
-              callback(null, movieRep.getStorage()
-                .collection(tmpCollectionName));
-            }
-          );
         }
-      });
+      );
     },
     'lists': {
       'best-periods': {

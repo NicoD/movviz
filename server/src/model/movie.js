@@ -27,7 +27,7 @@ var RatingType = {
   max: 10
 };
 var MovieSchema = new Schema({
-  slug: String,
+  slug: {type: String, index: true},
   title_ordered: String,
   title: String,
   genres: {type: [GenreSchema], index: true},
@@ -52,7 +52,7 @@ var MovieSchema = new Schema({
     rating: RatingType,
     updated_at: { type: Date, defaumt: Date.now }
   }
-}, { collection: 'movies' });
+}, { collection: 'movie' });
 
 
 // save preprocessing
@@ -76,6 +76,7 @@ MovieSchema.pre('save', function(next) {
   this.imdb.rating = Math.round(this.imdb.rating*100) / 100;
   next();
 });
+
 
 /**
  * return one result by its id
@@ -103,7 +104,7 @@ MovieSchema.statics.getResults = function(criteria, pagination, cb) {
       return cb(err);
     }
     pagination.applyTo(query, count);
-    cb(null, query);
+    query.exec();
   });
 };
 
@@ -156,6 +157,11 @@ MovieSchema.statics.getAggregatedResults = function(customlist, pagination, cb) 
 };
 
 
+/**
+ * Movie model factory
+ * @param {Object}
+ * @return {Object}
+ */
 module.exports.create = function(conn) {
   return conn.model('Movie', MovieSchema);
 }; 
