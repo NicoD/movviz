@@ -19,20 +19,6 @@ var key = 'movviz',
   logger = require('./logger').Logger;
 
 /**
- * Download successfull callback
- * @callback module:utils/file~onDownload
- * @param {String} error
- * @param {String} file written
- */
-
-/**
- * mkdir successfull callback
- * @callback module:utils/file~onMkdir
- * @param {String} error
- */
-
-
-/**
  * generate a determinist temp path from a url
  * @param {String} url - url of the resource
  * @return {String} temp path name
@@ -57,12 +43,12 @@ module.exports.getTempPath = getTempPath;
 /**
  * delete recursivly a folder and its folder children (inverse of rmdir -p)
  * @param {String} path 
- * @param {module:utils/file~onRmDir}
+ * @param {callback}
  */
-var rmdirR = function(dirPath, callback) {
+var rmdirR = function(dirPath, cb) {
   fs.exists(dirPath, function(exists) {
     if(!exists) {
-      return callback();
+      return cb();
     }
     fs.readdir(dirPath, function(err, files) {
 
@@ -71,7 +57,7 @@ var rmdirR = function(dirPath, callback) {
           if(err) {
             return err;
           }
-          callback(err);
+          cb(err);
         });
       };
       if(files.length === 0) {
@@ -91,7 +77,7 @@ var rmdirR = function(dirPath, callback) {
         };
         async.map(files, _rmdirR, function(err, results) {
           if(err) {
-            return callback(err);
+            return cb(err);
           }
           deleteThis();
         });
@@ -103,7 +89,7 @@ var rmdirR = function(dirPath, callback) {
 /**
  * delete recursivly a folder and its folder children (inverse of rmdir -p)
  * @param {String} path 
- * @param {module:utils/file~onRmDir}
+ * @param {callback}
  */
 module.exports.rmdirR = rmdirR;
 
@@ -112,24 +98,24 @@ module.exports.rmdirR = rmdirR;
  * create recursivly a complete folder path (with parents)
  * @param {String} path 
  * @param {Number} mode
- * @param {module:utils/file~onMkdir}
+ * @param {callback}
  */
-var mkdirP = function(dirPath, mode, callback) {
+var mkdirP = function(dirPath, mode, cb) {
   fs.exists(dirPath, function(exists) {
     if(exists) {
-      return callback();
+      return cb();
     }
     fs.mkdir(dirPath, mode, function(error) {
 
       if(error && error.errno === 34) {
         mkdirP(path.dirname(dirPath), mode, function(error) {
           if(error) {
-            return callback(error);
+            return cb(error);
           }
-          mkdirP(dirPath, mode, callback);
+          mkdirP(dirPath, mode, cb);
         });
-      } else if(callback) {
-        return callback(error);
+      } else if(cb) {
+        return cb(error);
       }
     });
   });
@@ -139,7 +125,7 @@ var mkdirP = function(dirPath, mode, callback) {
  * create recursivly a folder (mkdir -p)
  * @param {String} path 
  * @param {Number} mode
- * @param {module:utils/file~onMkdir}
+ * @param {callback}
  */
 module.exports.mkdirP = mkdirP;
 

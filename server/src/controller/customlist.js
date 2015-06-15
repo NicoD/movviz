@@ -1,10 +1,9 @@
 'use strict';
 
-var customlistRepFactory = require('../repository/customlist'),
-  movieRepFactory = require('../repository/movie'),
+var customlistModelFactory = require('../model/customlist'),
+  movieModelFactory = require('../model/movie'),
   mydb = require('../db'),
-  paginationFactory = require('../utils/pagination'),
-  listAction = require('../action/list');
+  paginationFactory = require('../utils/pagination');
 
 module.exports = function(app) {
 
@@ -12,23 +11,23 @@ module.exports = function(app) {
    * custom list API
    */
   app.get('/api/customlist/:slug/:page', function(req, res) {
-    mydb.connect(function(err, db) {
+    mydb.connect(function(err, conn) {
       if(err) {
         throw err;
       }
       var resultsPerPage = 15;
       var pagination = paginationFactory.create(req.params.page ? parseInt(req.params.page, 10) : 0, resultsPerPage);
-      var movieRep = movieRepFactory.create(db);
-      var customlistRep = customlistRepFactory.create(db);
-      customlistRep.getBySlug(req.params.slug, function(err, result) {
+      var MovieModel = movieModelFactory.create(conn);
+      var CustomlistModel = customlistModelFactory.create(conn);
+      CustomlistModel.findBySlug(req.params.slug).lean().exec(function(err, customlist) {
         if(err) {
           throw err;
         }
-        setCustomlistResult(movieRep, result, pagination, function(err) {
+        setCustomlistResult(MovieModel, customlist, pagination, function(err) {
           if(err) {
             throw err;
           }
-          res.send(result);
+          res.send(customlist);
         });
       });
     });
@@ -39,39 +38,36 @@ module.exports = function(app) {
    * custom lists full result API
    */
   app.get('/api/customlists/results', function(req, res) {
-    mydb.connect(function(err, db) {
+    mydb.connect(function(err, conn) {
       if(err) {
         throw err;
       }
-      var action = listAction.create({}, {}, customlistRepFactory.create(db));
-      action.on('process-done', function() {
-        res.send(results);
-      });
 
       // pagination concern ONLY the results, not pagination is supported for the lists (too few)
       // when getting ALL the results, only first page is supports
       var resultsPerPage = 15;
-      var movieRep = movieRepFactory.create(db);
+      var MovieModel = movieModelFactory.create(conn);
+      var CustomlistModel = customlistModelFactory.create(conn);
       var results = [];
-      action.process(function(err, iterator) {
-        var iterate = function(err, obj) {
-          if(!obj) {
-            return;
-          }
+
+      CustomlistModel.findWithPagination({}, {}, function(err, customlistRes) {
+        var stream = customlistRes.lean().stream();
+        stream.on('data', function(customlist) {
+          var self = this;
           var pagination = paginationFactory.create(0, resultsPerPage);
-          results.push(obj);
-          obj.list = {
-            pagination: pagination,
-            results: []
-          };
-          setCustomlistResult(movieRep, obj, pagination, function(err) {
+          results.push(customlist);
+          this.pause();
+          setCustomlistResult(MovieModel, customlist, pagination, function(err) {
             if(err) {
               throw err;
             }
-            iterator.next(iterate);
+            self.resume();
           });
-        };
-        iterator.next(iterate);
+        }).on('error', function(err) {
+          throw err;
+        }).on('close', function() {
+          res.send(results);
+        });
       });
     });
   });
@@ -79,26 +75,26 @@ module.exports = function(app) {
 
   /**
    * helper method that apply cutomlist results to a custom list
-   * @param {Object} movieRep
+   * @param {Object} MovieaModel
    * @param {Object} customlist
    * @param {Object} pagination
-   * @param {Callback} onFilled
+   * @param {callback}
    */
-  function setCustomlistResult(movieRep, customlist, pagination, onFilled) {
+  function setCustomlistResult(MovieModel, customlist, pagination, cb) {
     customlist.list = {
       pagination: pagination,
       results: []
     };
-    movieRep.getAggregatedResults(customlist, pagination, function(err, aggResults) {
+    MovieModel.getAggregatedResults(customlist, pagination, function(err, aggResults) {
       if(err) {
-        return onFilled(err);
+        return cb(err);
       }
-      aggResults.toArray(function(err, arr) {
+      aggResults.exec(function(err, arr) {
         if(err) {
-          return onFilled(err);
+          return cb(err);
         }
         customlist.list.results = arr;
-        onFilled();
+        cb();
       });
     });
   }

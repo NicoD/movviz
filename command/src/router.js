@@ -6,25 +6,17 @@
 
 
 var mydb = require('../../server/src/db'),
-  Command = require('commander').Command,
-  util = require('util'),
-  actionBuilderFactory = require('./builderFactory'),
-  logger = require('../../server/src/utils/logger').Logger;
+    Command = require('commander').Command,
+    actionBuilderFactory = require('./builderFactory'),
+    logger = require('../../server/src/utils/logger').Logger;
 
 
 /**
  * CommandRouter is used to build an action according to the command line args
  * @class
- * @param {array} argv - Args of the process (process.argv)
+ * @param {Array} argv - Args of the process (process.argv)
  */
 var CommandRouter = function(argv) {
-
-  /**
-   * Callback used when getting a action
-   * @callback module:command/router~CommandRouter~onGet
-   * @param {string} error
-   * @param {Object} action object
-   */
 
   var program = new Command();
 
@@ -44,7 +36,8 @@ var CommandRouter = function(argv) {
     console.log('');
     console.log('    $ nodejs movviz.js --cmd=import --source=/tmp/file.csv');
     console.log('    $ nodejs movviz.js --cmd=list -v');
-    console.log('    $ nodejs movviz.js --cmd=install --modules=movie,customlist');
+    console.log('    $ nodejs movviz.js --cmd=install --modules=customlist');
+    console.log('    $ nodejs movviz.js --cmd list -v -l 1000 --criteria search');
     console.log('');
   });
 
@@ -53,39 +46,34 @@ var CommandRouter = function(argv) {
 
   /**
    * Do the routing and generate the acion coreesponding to the given args.
-   * @param {module:command/router~CommandRouter~onGet} onGet
+   * @param {callback}
    */
-  this.get = function(onGet) {
+  this.get = function(cb) {
 
     // initialize the verbose mode
     logger.level = program.verbose ? 'info' : 'error';
     logger.log('info', 'running command %s', program.cmd);
 
-
-    mydb.connect(function(err, db) {
+    mydb.connect(function(err, conn) {
       if(err) {
-        return onGet(err);
+        return cb(err);
       }
       logger.log('info', 'connection to database');
 
-      try {
-        actionBuilderFactory.create(program.cmd)
-          .create(db, program,
+      actionBuilderFactory
+          .create(program.cmd)
+          .create(conn, program,
             function(err, action) {
-              if(!err) {
-                action.on('process-done', function() {
-                  db.close();
-                });
-                action.on('error', function() {
-                  db.close();
-                });
-              }
-              onGet(err, action);
+              if(err) { return cb(err); }
+              action.on('process-done', function() {
+                conn.close();
+              });
+              action.on('error', function(err) {
+                conn.close();
+                cb(err);
+              });
+              cb(null, action);
             });
-
-      } catch(e) {
-        return onGet(e);
-      }
     });
   };
 };
@@ -93,8 +81,8 @@ var CommandRouter = function(argv) {
 
 /** 
  * CommandRouter factory
- * @return {module:command/router~CommandRouter}
- * @param {array} argv - Args of the process (process.argv)
+ * @param {Array} argv - Args of the process (process.argv)
+ * @return {Object}
  */
 module.exports.create = function(argv) {
   return new CommandRouter(argv);

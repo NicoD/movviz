@@ -1,37 +1,55 @@
 /**
- * command install action  builder
+ * command install action builder
  * @module command/builder/install
  */
 'use strict';
 
-var movieRepFactory = require('../../../server/src/repository/movie'),
-    customlistRepFactory = require('../../../server/src/repository/customlist'),
-  actionFactory = require('../../../server/src/action/install');
+var customlistModelFactory = require('../../../server/src/model/customlist'),
+    logger = require('../../../server/src/utils/logger').Logger,
+    events = require('events'),
+    util = require('util'),
+    async = require('async');
+
 
 /**
- * Callback used when the action is build
- * @callback module:command/builder/install~onBuild
- * @param {string} error
- * @param {Object} action
+ * Installation class
+ * @class
+ * @param {Array} installfcts
  */
+var InstallAction = function(conn, installfcts) {
+  var self = this;
+  events.EventEmitter.call(this);
+
+  this.process = function() {
+    logger.log('info', 'start installation');
+    async.each(installfcts, function(installfct, callback) {
+      installfct(conn, callback);
+    }, function(err) {
+      if(err)
+        return self.emit('error', err);
+      logger.log('info', 'installation done');
+      self.emit('process-done');
+    });
+  };
+};
+
+util.inherits(InstallAction, events.EventEmitter);
+
 
 /**
  * list action builder
- * @param {Object} db - database connection
+ * @param {Object} conn
  * @param {Object} program - cmd line result
- * @param {module:command/builder/list~onBuild} onBuild
+ * @param {callback}
  */
-exports.create = function(db, program, onBuild) {
-  var repositories = [],
-    modules = [];
+exports.create = function(conn, program, cb) {
+  var installfcts = [],
+      modules = [];
   if(program.modules) {
     modules = program.modules.split(',');
   }
-  if(modules.indexOf('movie') != -1) {
-    repositories.push(movieRepFactory.create(db));
-  }
   if(modules.indexOf('customlist') != -1) {
-    repositories.push(customlistRepFactory.create(db));
+    installfcts.push(customlistModelFactory.install);
   }
-  onBuild(null, actionFactory.create(repositories));
+  cb(null, new InstallAction(conn, installfcts));
 };

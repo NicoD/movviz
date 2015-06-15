@@ -15,16 +15,10 @@ var fs = require('fs'),
    * import movie from a source into a repository
    * @class
    * @param {string} filePath - path of the file
-   * @param {module:entity/MovieRepository} repository
+   * @param {Object} MovieModel 
    */
-  ImportAction = function(filePath, repository) {
+  ImportAction = function(filePath, MovieModel) {
 
-
-    /**
-     * Callback used when data all all stored
-     * @callback module:action/import~ImportAction~onStored
-     * @param {Number} total stored
-     */
 
     var self = this;
     events.EventEmitter.call(this);
@@ -36,25 +30,31 @@ var fs = require('fs'),
      * @return {Object} cleaned result
      */
     var cleanRawResult = function(data) {
-      var res, directors;
-      res = {
-        'seenAt': Date.parse(data[2]),
-        'title': data[5],
-        'genre': data[12].split(/[\s,]+/),
-        'directors': [],
-        'rating': Math.round(parseInt(data[8], 10) * 100) / 100,
-        'runtime': parseInt(data[10], 10),
-        'year': parseInt(data[11], 10),
-        'imdb': {
-          'id': data[1],
-          'url': data[15],
-          'rating': Math.round(parseInt(data[9], 10) * 100) / 100
+      /*jshint -W069 */
+      var res = {
+        title: data['Title'],
+        watched_at: Date.parse(data['created']),
+        genres: [],
+        directors: [],
+        rating: parseInt(data['You rated'], 10),
+        runtime: parseInt(data['Runtime (mins)'], 10),
+        year: parseInt(data['Year'], 10),
+        imdb: {
+          _id: data['const'],
+          url: data['URL'],
+          rating: parseInt(data['IMDb Rating'], 10),
         }
       };
-      directors = data[7].split(',');
-      directors.forEach(function(elem) {
+      var directors = data['Directors'].split(',');
+      directors.forEach(function(director) {
         res.directors.push({
-          'name': elem
+          name: director.trim()
+        });
+      });
+      var genres = data['Genres'].split(/[\s,]+/);
+      genres.forEach(function(genre) {
+        res.genres.push({
+          label: genre
         });
       });
       return res;
@@ -64,9 +64,9 @@ var fs = require('fs'),
     /**
      * parse and store the content of the filePath into the repository
      *
-     * @param {module:action/import~ImportAction~onStored}
+     * @param {callback}
      */
-    var store = function(onStored) {
+    var store = function(cb) {
       logger.log('info', 'reading \'%s\' and storing results into local database', filePath);
 
 
@@ -77,27 +77,31 @@ var fs = require('fs'),
       //  - at the last db insert (if no db inserts are pending, and the file have already been fully parsed)
       //  - at the end of the parsing (if there is no db insert pending)
       var stream = fs.createReadStream(filePath),
-        csvStream = require('fast-csv').parse(),
+        csvStream = require('fast-csv').parse({
+          headers: true
+        }),
         countInsertRunning = 0,
         countInsertTotal = 0,
         parsingFinished = false,
-        onInsert = function() {
+        cbInsert = function(err) {
+          if(err) {} // ignore err
+
           countInsertTotal++;
           // file has been parsed and it is was the last pending db insert: end of the operation
           if(--countInsertRunning === 0 && parsingFinished) {
-            onStored(countInsertTotal);
+            cb(null, countInsertTotal);
           }
         };
       csvStream.on('data', function(data) {
         countInsertRunning++;
-        repository.store(cleanRawResult(data), onInsert);
+        new MovieModel(cleanRawResult(data)).save(cbInsert);
       }).on('data-invalid', function(data) {
         logger.log('warn', 'invalid data \'%s\'', String(data));
       }).on('end', function() {
         logger.log('info', 'parsing done');
         // end of the parsing, and no pending db insert: end of the operation
         if(countInsertRunning === 0) {
-          onStored(countInsertTotal);
+          cb(null, countInsertTotal);
         }
         parsingFinished = true;
       });
@@ -108,9 +112,12 @@ var fs = require('fs'),
     /**
      * process the import
      */
-    this.process = function() {
+    this.process = function(cb) {
       logger.log('info', 'importing from \'%s\'', filePath);
-      store(function(total) {
+      store(function(err, total) {
+        if(err) {
+          return cb(err);
+        }
         logger.log('info', 'total stored: ' + total);
         self.emit('process-done');
       });
@@ -124,8 +131,8 @@ util.inherits(ImportAction, events.EventEmitter);
 /** 
  * ImportAction factory
  * @param {string} filePath
- * @param {module:entity/MovieRepository} repository
+ * @param {Object} MovieModel
  */
-module.exports.create = function(filePath, repository) {
-  return new ImportAction(filePath, repository);
+module.exports.create = function(filePath, MovieModel) {
+  return new ImportAction(filePath, MovieModel);
 };

@@ -10,7 +10,7 @@
   "indent_with_tabs": false,
   "jslint_happy": false,
   "keep_array_indentation": true,
-  "keep_function_indentation": false,
+  "keep_function_indentation": true,
   "max_preserve_newlines": 0,
   "preserve_newlines": true,
   "space_after_anon_function": false,

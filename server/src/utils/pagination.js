@@ -15,7 +15,6 @@ var logger = require('../utils/logger').Logger,
   Pagination = function(page, resultsPerPage) {
     this.page = page;
     this.resultsPerPage = resultsPerPage;
-
     this.currentPage = this.page;
     this.totalPages = -1;
     this.totalResults = -1;
@@ -48,7 +47,7 @@ Pagination.prototype.applyTo = function(results, totalResults) {
  * create a new pagination object
  * @param {Number} page - current page
  * @param {Number} resultsPerPage
- * @return {module:utils/pagination~Pagination} pagination
+ * @return {Object} pagination
  */
 module.exports.create = function(page, resultsPerPage) {
   return new Pagination(page, resultsPerPage);

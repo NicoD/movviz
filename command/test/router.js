@@ -39,6 +39,4 @@ describe('command/src/router', function() {
         done();
       });
   });
-
-
 });
