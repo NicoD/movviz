@@ -5,7 +5,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
+  Schema = mongoose.Schema,
   AggregationModel = require('./movie/aggregation'),
   async = require('async'),
   StringUtil = require('../utils/string');
@@ -13,11 +13,19 @@ var mongoose = require('mongoose'),
 
 
 var CustomlistSchema = new Schema({
-  slug: {type: String, index: true},
+  slug: {
+    type: String,
+    index: true
+  },
   name: String,
-  'list-type': {type: String, enum: ['aggregation']},
+  'list-type': {
+    type: String,
+    enum: ['aggregation']
+  },
   'list-name': String
-}, { collection: 'customlist'});
+}, {
+  collection: 'customlist'
+});
 
 
 CustomlistSchema.pre('save', function(next) {
@@ -32,17 +40,17 @@ CustomlistSchema.pre('save', function(next) {
  * @param {Object} pagination
  * @param {callback}
  */
-CustomlistSchema.statics.getResults = function(criteria, pagination, cb) {
+CustomlistSchema.statics.findWithPagination = function(criteria, pagination, cb) {
   var query = this.find(criteria);
   if(!pagination || !pagination.applyTo) {
-    return query.exec(cb);
+    return cb(null, query);
   }
-  query.count(function(err, count) {
+  this.find(criteria).count(function(err, count) {
     if(err) {
       return cb(err);
     }
     pagination.applyTo(query, count);
-    query.exec(cb);
+    return cb(null, query);
   });
 };
 
@@ -52,8 +60,10 @@ CustomlistSchema.statics.getResults = function(criteria, pagination, cb) {
  * @param {String} slug
  * @param {callback}
  */
-CustomlistSchema.statics.getBySlug = function(slug, cb) {
-  this.findOne({slug: slug}, cb);
+CustomlistSchema.statics.findBySlug = function(slug, cb) {
+  return this.findOne({
+    slug: slug
+  }, cb);
 };
 
 
@@ -85,14 +95,14 @@ module.exports.install = function(conn, cb) {
 
     async.each(defaultAggregationLists, function(listCategory, callbackListCategory) {
       async.each(listCategory[1], function(list, callbackList) {
-          var listPath = listCategory[0] + ':' + list;
-          var listDetail = AggregationModel.get(listPath);
-          new CustomlistModel({
-              'name': listDetail.name,
-              'list-type': "aggregation",
-              'list-name': listPath
-            }).save(callbackList);
-          }, callbackListCategory);
-      }, cb);
+        var listPath = listCategory[0] + ':' + list;
+        var listDetail = AggregationModel.get(listPath);
+        new CustomlistModel({
+          'name': listDetail.name,
+          'list-type': "aggregation",
+          'list-name': listPath
+        }).save(callbackList);
+      }, callbackListCategory);
+    }, cb);
   });
 };

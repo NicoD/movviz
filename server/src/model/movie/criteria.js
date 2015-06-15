@@ -1,6 +1,6 @@
 /**
- * movie repository criteria
- * @module repository/movie/criteria
+ * movie criteria model
+ * @module model/movie/criteria
  */
 'use strict';
 
@@ -23,7 +23,7 @@ var criterias = {
       {
         "name": "case sensitive (Y/N)",
         "transform": function(str) {
-          return str === "Y";
+          return str !== "Y";
         }
       }
     ]
@@ -36,34 +36,27 @@ var getWhere = function(args) {
 };
 
 
-/**
- * CriteraRepository
- * centralize criteria access
- *
- * @class
- */
-var Repository = function() {
-
+var CriteriaModel = {
 
   /**
    * return the criteria corresponding to the given name
    * @param {String} name
    * @return object
    */
-  this.findByName = function(name) {
+  findByName: function(name) {
     var ret = Object.create(criterias[name]);
     if(ret) {
       ret.getWhere = getWhere;
     }
     return ret;
-  };
+  }
 };
 
 
 /**
- * Criteria repository factory
- * @return {module:respository/movie/criteria~Repository}
+ * Criteria model factory
+ * @return {Object}
  */
 module.exports.create = function() {
-  return new Repository();
+  return CriteriaModel;
 };

@@ -41,6 +41,6 @@ var Logger = function() {
 
 /** 
  * Logger object 
- * @type {module:utils/logger~Logger}
+ * @type {Object}
  */
 exports.Logger = new Logger();

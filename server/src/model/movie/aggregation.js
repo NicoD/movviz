@@ -7,37 +7,33 @@ var aggregation = {
   'directors': {
     'type': 'map-reduce',
     'description': 'general aggregation per directors',
-    'mapReduce': function(movieRep, callback) {
-      var tmpCollectionName = 'tmp_directors';
-      movieRep.getCollection().mapReduce(
-        // map
-        function() {
-          for(var idx = 0; idx < this.directors.length; idx++) {
-            var key = this.directors[idx].name;
-            if(!key) {
-              continue;
+    'mapReduce': function(MovieModel, callback) {
+      var tmpCollectionName = 'tmp_director';
+      MovieModel.mapReduce({
+          map: function() {
+            for(var idx = 0; idx < this.directors.length; idx++) {
+              var key = this.directors[idx].name;
+              if(!key) {
+                continue;
+              }
+              var value = {
+                count: 1,
+                total: parseInt(this.rating)
+              };
+              emit(key, value);
             }
-            var value = {
-              count: 1,
-              total: parseInt(this.rating)
+          },
+          reduce: function(key, values) {
+            var reducedVal = {
+              count: 0,
+              total: 0
             };
-            emit(key, value);
-          }
-        },
-        // reduce
-        function(key, values) {
-          var reducedVal = {
-            count: 0,
-            total: 0
-          };
-          for(var idx = 0; idx < values.length; idx++) {
-            reducedVal.count += values[idx].count;
-            reducedVal.total += values[idx].total;
-          }
-          return reducedVal;
-        },
-        // options
-        {
+            for(var idx = 0; idx < values.length; idx++) {
+              reducedVal.count += values[idx].count;
+              reducedVal.total += values[idx].total;
+            }
+            return reducedVal;
+          },
           query: {},
           out: tmpCollectionName,
           finalize: function(key, reducedVal) {
@@ -46,14 +42,7 @@ var aggregation = {
             return reducedVal;
           }
         },
-        // callback
-        function(err) {
-          if(err) {
-            return callback(err);
-          }
-          callback(null, movieRep.getStorage()
-            .collection(tmpCollectionName));
-        }
+        callback
       );
     },
     'lists': {
@@ -78,35 +67,31 @@ var aggregation = {
   'periods': {
     'type': 'map-reduce',
     'description': 'general aggregation per period',
-    'mapReduce': function(movieRep, callback) {
-      var tmpCollectionName = 'tmp_periods';
-      movieRep.getCollection().mapReduce(
-        // map
-        function() {
-          if(!this.year) {
-            return;
-          }
-          var period = this.year - this.year % 10;
-          var value = {
-            count: 1,
-            total: parseInt(this.rating)
-          };
-          emit(period, value);
-        },
-        // reduce
-        function(key, values) {
-          var reducedVal = {
-            count: 0,
-            total: 0
-          };
-          for(var idx = 0; idx < values.length; idx++) {
-            reducedVal.count += values[idx].count;
-            reducedVal.total += values[idx].total;
-          }
-          return reducedVal;
-        },
-        // options
-        {
+    'mapReduce': function(MovieModel, callback) {
+      var tmpCollectionName = 'tmp_period';
+      MovieModel.mapReduce({
+          map: function() {
+            if(!this.year) {
+              return;
+            }
+            var period = this.year - this.year % 10;
+            var value = {
+              count: 1,
+              total: parseInt(this.rating)
+            };
+            emit(period, value);
+          },
+          reduce: function(key, values) {
+            var reducedVal = {
+              count: 0,
+              total: 0
+            };
+            for(var idx = 0; idx < values.length; idx++) {
+              reducedVal.count += values[idx].count;
+              reducedVal.total += values[idx].total;
+            }
+            return reducedVal;
+          },
           query: {},
           out: tmpCollectionName,
           finalize: function(key, reducedVal) {
@@ -115,13 +100,7 @@ var aggregation = {
             return reducedVal;
           }
         },
-        function(err) {
-          if(err) {
-            return callback(err);
-          }
-          callback(null, movieRep.getStorage()
-            .collection(tmpCollectionName));
-        }
+        callback
       );
     },
     'lists': {

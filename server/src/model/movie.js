@@ -6,8 +6,8 @@
 
 
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
-    StringUtil = require('../utils/string'),
+  Schema = mongoose.Schema,
+  StringUtil = require('../utils/string'),
   AggregationModel = require('./movie/aggregation');
 
 
@@ -27,32 +27,52 @@ var RatingType = {
   max: 10
 };
 var MovieSchema = new Schema({
-  slug: {type: String, index: true},
+  slug: {
+    type: String,
+    index: true
+  },
   title_ordered: String,
   title: String,
-  genres: {type: [GenreSchema], index: true},
-  directors: {type: [DirectorSchema], index: true},
+  genres: {
+    type: [GenreSchema],
+    index: true
+  },
+  directors: {
+    type: [DirectorSchema],
+    index: true
+  },
   rating: RatingType,
   runtime: {
     type: Number,
-    min:1,
+    min: 1,
     max: 1440
   },
-  year: { 
-    type: Number, 
-    min: 1850, 
-    max: new Date().getFullYear()+10, 
-    index: true 
+  year: {
+    type: Number,
+    min: 1850,
+    max: new Date().getFullYear() + 10,
+    index: true
   },
-  watch_the: { type: Date, default: Date.now },
-  updated_at: { type: Date, default: Date.now },
+  watch_the: {
+    type: Date,
+    default: Date.now
+  },
+  updated_at: {
+    type: Date,
+    default: Date.now
+  },
   imdb: {
     _id: String,
     url: String,
     rating: RatingType,
-    updated_at: { type: Date, defaumt: Date.now }
+    updated_at: {
+      type: Date,
+      defaumt: Date.now
+    }
   }
-}, { collection: 'movie' });
+}, {
+  collection: 'movie'
+});
 
 
 // save preprocessing
@@ -62,18 +82,18 @@ MovieSchema.pre('save', function(next) {
   this.title_order = StringUtil.orderify(this.title);
 
   var i;
-  for(i=0; i<this.directors.length; i++) {
+  for(i = 0; i < this.directors.length; i++) {
     var director = this.directors[i];
     director._id = StringUtil.slugify(director.name);
     director.name_order = StringUtil.orderify(director.name, true);
   }
-  for(i=0; i<this.genres.length; i++) {
+  for(i = 0; i < this.genres.length; i++) {
     var genre = this.genres[i];
     genre._id = StringUtil.slugify(genre.label);
   }
 
-  this.rating = Math.round(this.rating*100) / 100;
-  this.imdb.rating = Math.round(this.imdb.rating*100) / 100;
+  this.rating = Math.round(this.rating * 100) / 100;
+  this.imdb.rating = Math.round(this.imdb.rating * 100) / 100;
   next();
 });
 
@@ -84,7 +104,9 @@ MovieSchema.pre('save', function(next) {
  * @param {callback}
  */
 MovieSchema.statics.findById = function(id, cb) {
-  this.findOne({_id: mongoose.Types.ObjectId(id)}, cb);
+  this.findOne({
+    _id: mongoose.Types.ObjectId(id)
+  }, cb);
 };
 
 
@@ -94,17 +116,17 @@ MovieSchema.statics.findById = function(id, cb) {
  * @param {Object} pagination
  * @param {callback}
  */
-MovieSchema.statics.getResults = function(criteria, pagination, cb) {
+MovieSchema.statics.findWithPagination = function(criteria, pagination, cb) {
   var query = this.find(criteria);
   if(!pagination || !pagination.applyTo) {
-    return query.exec(cb);
+    return cb(null, query);
   }
-  query.count(function(err, count) {
+  this.find(criteria).count(function(err, count) {
     if(err) {
       return cb(err);
     }
     pagination.applyTo(query, count);
-    query.exec();
+    cb(null, query);
   });
 };
 
@@ -118,13 +140,13 @@ MovieSchema.statics.getResults = function(criteria, pagination, cb) {
  */
 MovieSchema.statics.getAggregatedResults = function(customlist, pagination, cb) {
   var rule = AggregationModel.get(customlist['list-name'], true),
-      list = AggregationModel.get(customlist['list-name']);
+    list = AggregationModel.get(customlist['list-name']);
 
   customlist['list-format'] = list.format;
 
   switch(rule.type) {
     case 'map-reduce':
-      rule.mapReduce(this, function(err, results) {
+      rule.mapReduce(this, function(err, ResultModel) {
         if(err) {
           return cb(err);
         }
@@ -136,12 +158,12 @@ MovieSchema.statics.getAggregatedResults = function(customlist, pagination, cb) 
             }
           };
         }
-        results = results.find(filter)
+        var results = ResultModel.find(filter)
           .sort(JSON.parse(list.sort));
         if(!pagination || !pagination.applyTo) {
           return cb(null, results);
         }
-        results.count(function(err, count) {
+        ResultModel.find(filter).count(function(err, count) {
           if(err) {
             return cb(err);
           }
@@ -164,4 +186,4 @@ MovieSchema.statics.getAggregatedResults = function(customlist, pagination, cb) 
  */
 module.exports.create = function(conn) {
   return conn.model('Movie', MovieSchema);
-}; 
+};

@@ -45,13 +45,17 @@ var fs = require('fs'),
           rating: parseInt(data['IMDb Rating'], 10),
         }
       };
-      var directors = data['Directors'].split(/[\s,]+/);
-      directors.forEach(function(elem) {
-        res.directors.push({name: elem});
+      var directors = data['Directors'].split(',');
+      directors.forEach(function(director) {
+        res.directors.push({
+          name: director.trim()
+        });
       });
       var genres = data['Genres'].split(/[\s,]+/);
       genres.forEach(function(genre) {
-        res.genres.push({label: genre});
+        res.genres.push({
+          label: genre
+        });
       });
       return res;
     };
@@ -73,12 +77,14 @@ var fs = require('fs'),
       //  - at the last db insert (if no db inserts are pending, and the file have already been fully parsed)
       //  - at the end of the parsing (if there is no db insert pending)
       var stream = fs.createReadStream(filePath),
-        csvStream = require('fast-csv').parse({headers: true}),
+        csvStream = require('fast-csv').parse({
+          headers: true
+        }),
         countInsertRunning = 0,
         countInsertTotal = 0,
         parsingFinished = false,
         cbInsert = function(err) {
-          if(err) { } // ignore err
+          if(err) {} // ignore err
 
           countInsertTotal++;
           // file has been parsed and it is was the last pending db insert: end of the operation
@@ -106,11 +112,11 @@ var fs = require('fs'),
     /**
      * process the import
      */
-    this.process = function() {
+    this.process = function(cb) {
       logger.log('info', 'importing from \'%s\'', filePath);
       store(function(err, total) {
         if(err) {
-          return self.emit('err', err);
+          return cb(err);
         }
         logger.log('info', 'total stored: ' + total);
         self.emit('process-done');

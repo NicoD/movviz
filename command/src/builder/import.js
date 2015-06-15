@@ -5,8 +5,8 @@
 'use strict';
 
 var fileUtil = require('../../../server/src/utils/file'),
-  movieModelFactory = require('../../../server/src/model/movie'),
-  actionFactory = require('../../../server/src/action/import');
+    movieModelFactory = require('../../../server/src/model/movie'),
+    actionFactory = require('../../../server/src/action/import');
 
 
 /**

@@ -1,12 +1,10 @@
 /**
- * command install action  builder
+ * command install action builder
  * @module command/builder/install
  */
 'use strict';
 
-var movieModelFactory = require('../../../server/src/model/movie'),
-    customlistModelFactory = require('../../../server/src/model/customlist'),
- 
+var customlistModelFactory = require('../../../server/src/model/customlist'),
     logger = require('../../../server/src/utils/logger').Logger,
     events = require('events'),
     util = require('util'),
@@ -16,7 +14,7 @@ var movieModelFactory = require('../../../server/src/model/movie'),
 /**
  * Installation class
  * @class
- * @param {Array} models
+ * @param {Array} installfcts
  */
 var InstallAction = function(conn, installfcts) {
   var self = this;
@@ -35,8 +33,8 @@ var InstallAction = function(conn, installfcts) {
   };
 };
 
-
 util.inherits(InstallAction, events.EventEmitter);
+
 
 /**
  * list action builder
@@ -46,7 +44,7 @@ util.inherits(InstallAction, events.EventEmitter);
  */
 exports.create = function(conn, program, cb) {
   var installfcts = [],
-    modules = [];
+      modules = [];
   if(program.modules) {
     modules = program.modules.split(',');
   }
