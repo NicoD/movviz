@@ -80,6 +80,12 @@ module.exports = function(grunt) {
             flatten: true,
             src: ['bower_components/angular/angular.min.js'],
             dest: 'public/vendor/angular/'
+          },
+          {
+            expand: true,
+            flatten: true,
+            src: ['bower_components/angular-route/angular-route.min.js'],
+            dest: 'public/vendor/angular-route/'
           }
         ]
       }
