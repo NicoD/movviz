@@ -74,6 +74,12 @@ module.exports = function(grunt) {
             cwd: 'client/images/',
             src: ['**/*.png'], 
             dest: 'public/images'
+          },
+          {
+            expand: true,
+            flatten: true,
+            src: ['bower_components/angular/angular.min.js'],
+            dest: 'public/vendor/angular/'
           }
         ]
       }
