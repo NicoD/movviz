@@ -60,7 +60,6 @@ module.exports = function(grunt) {
           optimization: 2
         },
         files: {
-          'public/vendor/bootstrap/bootstrap.min.css': 'bower_components/bootstrap/less/bootstrap.less',
           'public/css/main.min.css': 'client/less/main.less'
         }
       }
@@ -92,6 +91,15 @@ module.exports = function(grunt) {
             flatten: true,
             src: ['bower_components/jquery/dist/jquery.min.js'],
             dest: 'public/vendor/jquery/'
+          },
+          {
+            expand: true,
+            flatten: true,
+            src: [
+              'bower_components/bootstrap/dist/js/bootstrap.min.js',
+              'bower_components/bootstrap/dist/css/bootstrap.min.css'
+            ],
+            dest: 'public/vendor/bootstrap'
           }
         ]
       }
