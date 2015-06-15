@@ -60,7 +60,8 @@ module.exports = function(grunt) {
           optimization: 2
         },
         files: {
-          'public/css/main.css': 'client/less/main.less'
+          'public/vendor/bootstrap/bootstrap.min.css': 'bower_components/bootstrap/less/bootstrap.less',
+          'public/css/main.min.css': 'client/less/main.less'
         }
       }
     },
