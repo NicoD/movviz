@@ -5,12 +5,24 @@ nav.navbar.navbar-default.navbar-fixed-top
       span.icon-bar
       span.icon-bar
       span.icon-bar
+    a(class='btn  btn-social btn-google navbar-toggle', ng-click='authenticate("google")')
+      i(class='fa fa-google')
+      Sign in with google
     a(class='navbar-brand', href='#')
       img(alt='Movviz' src='public/images/m_100_100.png')
+
+
+
+
   div.collapse.navbar-collapse(id='navbar-collapse', ng-controller="NavController")
+    a(class='btn  btn-social btn-google', ng-click='authenticate("google")')
+      i(class='fa fa-google')
+      Sign in with google
     ul.nav.navbar-nav
       li(ng-class='{ active:isActive(\'/\')}')
         a(href='/') Home
       li(ng-class='{ active:isActive(\'/movies\')}')
         a(href='/movies') Movies
+
+
 

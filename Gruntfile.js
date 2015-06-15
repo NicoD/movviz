@@ -100,6 +100,31 @@ module.exports = function(grunt) {
               'bower_components/bootstrap/dist/css/bootstrap.min.css'
             ],
             dest: 'public/vendor/bootstrap'
+          },
+          {
+            expand: true,
+            flatten: true,
+            src: ['bower_components/satellizer/satellizer.min.js'],
+            dest: 'public/vendor/satellizer'
+          },
+          {
+            expand: true,
+            flatten: true,
+            src: ['bower_components/bootstrap-social/bootstrap-social.css'],
+            dest: 'public/vendor/bootstrap-social'
+          },
+          {
+            expand: true,
+            flatten: true,
+            src: ['bower_components/font-awesome/css/font-awesome.min.css'],
+            dest: 'public/vendor/font-awesome/css'
+          },
+          {
+            expand: true,
+            flatten: true,
+            src: ['bower_components/font-awesome/fonts/*'],
+            dest: 'public/vendor/font-awesome/fonts'
+    
           }
         ]
       }
@@ -173,6 +198,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('command', ['jshint:command', 'jsbeautfier:command']);
   grunt.registerTask('server', ['mochaTest', 'jsbeautifier:server', 'jshint:server']);
-  grunt.registerTask('client', ['karma:continuous', 'jsbeautifier:client', 'jshint:client',  'uglify', 'less', 'copy']);
+  grunt.registerTask('client', ['jsbeautifier:client', 'jshint:client',  'uglify', 'less', 'copy', 'karma:continuous']);
   grunt.registerTask('default', ['server', 'client']);
 };
