@@ -32,15 +32,38 @@ body {
   #navbar-collapse > ul li {
     margin-left: 100px;
   }
+
 }
 
 nav.navbar {
   a.btn {
     float: right;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 8px;
+    margin-bottom: 8px;
     margin-right: 10px;
   }
+
+  div.profile {
+    float: right;
+    margin-right: 10px;
+    margin-top: 5px;
+
+    img {
+      border: 1px solid #000;
+      margin-right: 3px;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .navbar-toggle-no-style {
+    display: none;
+  }
+}
+
+.navbar-toggle-no-style {
+  position: relative;
+  float: right;
 }
 
 .pagination > .active > a {

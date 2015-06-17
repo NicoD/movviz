@@ -5,19 +5,27 @@ nav.navbar.navbar-default.navbar-fixed-top
       span.icon-bar
       span.icon-bar
       span.icon-bar
-    a(class='btn  btn-social btn-google navbar-toggle', ng-click='authenticate("google")')
-      i(class='fa fa-google')
-      Sign in with google
-    a(class='navbar-brand', href='#')
-      img(alt='Movviz' src='public/images/m_100_100.png')
-
+    div(ng-controller='LoginController')
+      a(class='btn  btn-social btn-google navbar-toggle-no-style', ng-click='authenticate("google")', ng-if='!isAuthenticated()')
+        i(class='fa fa-google')
+        | Google
+      span(ng-if='isAuthenticated()', class='profile navbar-toggle-no-style')
+        a(href='/logout') logout
+      a(class='navbar-brand', href='#')
+        img(alt='Movviz' src='public/images/m_100_100.png')
 
 
 
   div.collapse.navbar-collapse(id='navbar-collapse', ng-controller="NavController")
-    a(class='btn  btn-social btn-google', ng-click='authenticate("google")')
-      i(class='fa fa-google')
-      Sign in with google
+    div(ng-controller='LoginController')
+      a(class='btn  btn-social btn-google', ng-click='authenticate("google")', ng-if='!isAuthenticated()')
+        i(class='fa fa-google')
+        | Sign in with google
+      div(ng-if='isAuthenticated()', class='profile')
+        img(src='{{user.picture}}')
+        | Welcome {{user.displayName}} &nbsp;|&nbsp;
+        a(href='/logout') logout
+
     ul.nav.navbar-nav
       li(ng-class='{ active:isActive(\'/\')}')
         a(href='/') Home
