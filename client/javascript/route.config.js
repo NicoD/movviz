@@ -13,6 +13,10 @@
       templateUrl: 'customlistlist.partial.html',
       controller: 'CustomlistListController'
     }).
+    when('/logout', {
+      template: null,
+      controller: 'LogoutController'
+    }).
     when('/movies', {
       templateUrl: 'movielist.partial.html',
       controller: 'MovieListController'

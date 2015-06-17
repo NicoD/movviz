@@ -18,8 +18,9 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'node_modules/chai/chai.js',
-      'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js',
-      'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.min.js',
+      'public/vendor/angular/angular.min.js',
+      'public/vendor/angular-route/angular-route.min.js',
+      'public/vendor/satellizer/satellizer.min.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'client/javascript/**/*.js'
     ],

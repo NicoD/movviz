@@ -6,6 +6,8 @@ html(lang="en", ng-app="movvizApp", ng-strict-di)
     base(href="/")
     title= Movviz
     link(rel='stylesheet', href='public/vendor/bootstrap/bootstrap.min.css')
+    link(rel='stylesheet', href='public/vendor/bootstrap-social/bootstrap-social.css')
+    link(rel='stylesheet', href='public/vendor/font-awesome/css/font-awesome.min.css')
     link(rel='stylesheet', href='public/css/main.min.css')
   body
     include nav.jade
@@ -16,4 +18,5 @@ html(lang="en", ng-app="movvizApp", ng-strict-di)
     script(src='public/vendor/bootstrap/bootstrap.min.js')
     script(src='public/vendor/angular/angular.min.js')
     script(src='public/vendor/angular-route/angular-route.min.js')
+    script(src='public/vendor/satellizer/satellizer.min.js')
     script(src='public/scripts/movviz.min.js')
