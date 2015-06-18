@@ -33,6 +33,10 @@
       templateUrl: 'moviedetail.partial.html',
       controller: 'MovieDetailController'
     }).
+    when('/import', {
+      templateUrl: 'import.partial.html',
+      controller: 'ImportController'
+    }).
     otherwise({
       redirectTo: '/movies'
     });

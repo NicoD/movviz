@@ -4,9 +4,25 @@
 var movieCriteriaModelFactory = require('../model/movie/criteria'),
   movieModelFactory = require('../model/movie'),
   mydb = require('../db'),
-  paginationFactory = require('../utils/pagination');
+  paginationFactory = require('../utils/pagination'),
+  authMiddleware = require('../middleware/auth'),
+  multipartyMiddleware = require('connect-multiparty')();
+
+
 
 module.exports = function(app) {
+
+
+  /**
+   * upload of the list
+   */
+  app.post('/api/import', authMiddleware, multipartyMiddleware, function(req, res) {
+    var file = req.files.file;
+    console.log(file.name);
+    console.log(file.type);
+
+  });
+
 
   /**
    * search movies result API

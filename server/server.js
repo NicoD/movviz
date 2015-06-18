@@ -4,8 +4,8 @@ var express = require('express'),
   fs = require('fs'),
   logger = require('./src/utils/logger').Logger,
   bodyParser = require('body-parser'),
-  cookieParser = require('cookie-parser');
-
+  cookieParser = require('cookie-parser'),
+  multipart = require('connect-multiparty');
 var app = express();
 
 app.set('views', './views');
@@ -16,6 +16,9 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(cookieParser());
+
+
+app.use(multipart({uploadDir: '/tmp/movviz/'}));
 
 // static route configuration
 require('./routes.js')(app);

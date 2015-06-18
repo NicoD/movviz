@@ -89,17 +89,35 @@ module.exports = function(grunt) {
           {
             expand: true,
             flatten: true,
+            src: [
+              'bower_components/angular-bootstrap/ui-bootstrap.min.js',
+              'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'
+            ],
+            dest: 'public/vendor/angular-bootstrap/'
+          },
+          {
+            expand: true,
+            flatten: true,
             src: ['bower_components/jquery/dist/jquery.min.js'],
             dest: 'public/vendor/jquery/'
           },
           {
             expand: true,
             flatten: true,
-            src: [
-              'bower_components/bootstrap/dist/js/bootstrap.min.js',
-              'bower_components/bootstrap/dist/css/bootstrap.min.css'
-            ],
-            dest: 'public/vendor/bootstrap'
+            src: ['bower_components/bootstrap/dist/js/bootstrap.min.js'],
+            dest: 'public/vendor/bootstrap/scripts/'
+          },
+          {
+            expand: true,
+            flatten: true,
+            src: ['bower_components/bootstrap/dist/css/bootstrap.min.css'],
+            dest: 'public/vendor/bootstrap/css/'
+          },
+          {
+            expand: true,
+            flatten: true,
+            src: ['bower_components/bootstrap/fonts/*'],
+            dest: 'public/vendor/bootstrap/fonts/'
           },
           {
             expand: true,

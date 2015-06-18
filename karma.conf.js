@@ -20,6 +20,8 @@ module.exports = function(config) {
       'node_modules/chai/chai.js',
       'public/vendor/angular/angular.min.js',
       'public/vendor/angular-route/angular-route.min.js',
+      'public/vendor/angular-bootstrap/ui-bootstrap.min.js',
+      'public/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'public/vendor/satellizer/satellizer.min.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'client/javascript/**/*.js'

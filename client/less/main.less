@@ -27,6 +27,18 @@ body {
 }
 
 
+.glyphicon {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: 400;
+  font-height: 100px;
+  .font-smoothing();
+}
+
+
 /* hack for the navigation to shift the list not to be overriden by the logo */
 @media (max-width: 767px) {
   #navbar-collapse > ul li {
@@ -54,6 +66,20 @@ nav.navbar {
     }
   }
 }
+
+div.main {
+  padding-top: 10px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 40px;
+  height: 100%;
+  border: 1px solid @listborder;
+  background-color: @listbackground;
+  .box-shadow(3px 2px 0px 0px @listborder);
+  .border-radius(5px);
+  color: @listtext;
+}
+
 
 @media (min-width: 768px) {
   .navbar-toggle-no-style {
@@ -117,5 +143,23 @@ div.customlist {
     font-weight: bold;
     color: @listtitle; 
     text-align:center;
+  }
+}
+
+
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  max-width: 100%;
+  min-height: 100%;
+  text-align: right;
+  display:block;
+  opacity: 0;
+}
+
+.import {
+  div.progressbar {
+    margin-top: 30px;
   }
 }
