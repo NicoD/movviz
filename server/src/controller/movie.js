@@ -4,6 +4,7 @@
 var movieCriteriaModelFactory = require('../model/movie/criteria'),
   movieModelFactory = require('../model/movie'),
   mydb = require('../db'),
+  importActionFactory = require('../action/import.js'),
   paginationFactory = require('../utils/pagination'),
   authMiddleware = require('../middleware/auth'),
   multipartyMiddleware = require('connect-multiparty')();
@@ -18,9 +19,14 @@ module.exports = function(app) {
    */
   app.post('/api/import', authMiddleware, multipartyMiddleware, function(req, res) {
     var file = req.files.file;
-    console.log(file.name);
-    console.log(file.type);
+    mydb.connect(function(err, conn) {
 
+      var importAction = importActionFactory.create(file.path, movieModelFactory.create(conn));
+      importAction.on('process-done', function() {
+        res.send({status: 'OK'});
+      });
+      importAction.process();
+    });
   });
 
 
