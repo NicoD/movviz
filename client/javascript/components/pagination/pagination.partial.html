@@ -1,0 +1,16 @@
+<nav>
+  <ul class="pagination pagination-sm" ng-if="pagination.totalPages > 1">
+    <li ng-class="pagination.prevPageDisabled()" ng-click="pagination.goto()">
+      <a href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li ng-repeat="n in pagination.range()" ng-class="{active: n == pagination.currentPage}" ng-click="pagination.goto(n+1)">
+      <a href="#" disabled-link>{{n+1}}</a>
+    </li>
+    <li ng-class="pagination.nextPageDisabled()" ng-click="pagination.goto(pagination.currentPage+2)">
+      <a href="#" arial-label="Next" disabled-link>
+          <span aria-hidden="true">&raquo;</a>
+    </li>
+  </ul>
+</nav>

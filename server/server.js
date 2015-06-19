@@ -18,7 +18,9 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 
 
-app.use(multipart({uploadDir: '/tmp/movviz/'}));
+app.use(multipart({
+  uploadDir: '/tmp/movviz/'
+}));
 
 // static route configuration
 require('./routes.js')(app);

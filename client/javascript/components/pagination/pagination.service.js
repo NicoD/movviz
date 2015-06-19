@@ -3,16 +3,16 @@
 
   angular
     .module('movvizApp')
-    .factory('paginatorFactory', paginatorFactory);
+    .factory('mzPaginationFactory', PaginationFactory);
 
 
-  paginatorFactory.$inject = ['$location'];
+  PaginationFactory.$inject = ['$location'];
 
-  function paginatorFactory($location) {
+  function PaginationFactory($location) {
     return {
       create: function(urlBuilder, onClick) {
-        var paginator = new Paginator();
-        paginator.goto = function(page) {
+        var pagination = new Pagination();
+        pagination.goto = function(page) {
           if(urlBuilder) {
             $location.path(urlBuilder(page));
           } else if(onClick) {
@@ -20,25 +20,25 @@
           }
           return false;
         };
-        return paginator;
+        return pagination;
       }
     };
   }
 
-  var Paginator = function() {
+  var Pagination = function() {
     this.currentPage = 0;
     this.totalPages = 0;
     this.rangeSize = 10;
   };
 
-  Paginator.prototype.prevPageDisabled = function() {
+  Pagination.prototype.prevPageDisabled = function() {
     return !this.currentPage ? "disabled" : "";
   };
-  Paginator.prototype.nextPageDisabled = function() {
+  Pagination.prototype.nextPageDisabled = function() {
     return this.currentPage === this.totalPages - 1 ? "disabled" : "";
   };
 
-  Paginator.prototype.range = function() {
+  Pagination.prototype.range = function() {
     var ret = [],
       start = Math.max(0, Math.ceil(this.currentPage - this.rangeSize / 2)),
       max = Math.min(this.totalPages, start + this.rangeSize);
