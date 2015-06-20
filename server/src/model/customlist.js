@@ -13,6 +13,11 @@ var mongoose = require('mongoose'),
 
 
 var CustomlistSchema = new Schema({
+  user: {
+    type: Schema.ObjectId,
+    ref: 'UserSchema',
+    index: true
+  },
   slug: {
     type: String,
     index: true
@@ -27,6 +32,12 @@ var CustomlistSchema = new Schema({
   collection: 'customlist'
 });
 
+CustomlistSchema.index({
+  user: 1,
+  slug: 1
+}, {
+  unique: true
+});
 
 CustomlistSchema.pre('save', function(next) {
   this.slug = StringUtil.slugify(this.name);
@@ -57,7 +68,7 @@ CustomlistSchema.statics.findWithPagination = function(criteria, pagination, cb)
 
 /**
  * return one results by its slug
- * @param {String} slug
+ * @param {string} slug
  * @param {callback}
  */
 CustomlistSchema.statics.findBySlug = function(slug, cb) {
@@ -79,9 +90,10 @@ module.exports.create = function(conn) {
 /**
  * installation of the Customlist
  * @param {Object}
+ * @param {string} 
  * @param {callback}
  */
-module.exports.install = function(conn, cb) {
+module.exports.install = function(conn, userId, cb) {
   var CustomlistModel = conn.model('Customlist', CustomlistSchema);
   CustomlistModel.remove({}, function(err) {
     if(err) {
@@ -98,6 +110,7 @@ module.exports.install = function(conn, cb) {
         var listPath = listCategory[0] + ':' + list;
         var listDetail = AggregationModel.get(listPath);
         new CustomlistModel({
+          'user': mongoose.Types.ObjectId(userId),
           'name': listDetail.name,
           'list-type': "aggregation",
           'list-name': listPath

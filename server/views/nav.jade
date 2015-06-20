@@ -1,11 +1,11 @@
-nav.navbar.navbar-default.navbar-fixed-top
-  .navbar-header
+nav.navbar.navbar-default.navbar-fixed-top(ng-controller='LoginController')
+  .navbar-header(ng-controller='LoginController')
     button(type='button' class='navbar-toggle', data-toggle='collapse' data-target='#navbar-collapse')
       span.sr-only  Toggle navigation
       span.icon-bar
       span.icon-bar
       span.icon-bar
-    div(ng-controller='LoginController')
+    div
       a(class='btn  btn-social btn-google navbar-toggle-no-style', ng-click='authenticate("google")', ng-if='!isAuthenticated()')
         i(class='fa fa-google')
         | Google
@@ -17,7 +17,7 @@ nav.navbar.navbar-default.navbar-fixed-top
 
 
   div.collapse.navbar-collapse(id='navbar-collapse', ng-controller="NavController")
-    div(ng-controller='LoginController')
+    div
       a(class='btn  btn-social btn-google', ng-click='authenticate("google")', ng-if='!isAuthenticated()')
         i(class='fa fa-google')
         | Sign in with google
@@ -31,6 +31,8 @@ nav.navbar.navbar-default.navbar-fixed-top
         a(href='/') Home
       li(ng-class='{ active:isActive(\'/movies\')}')
         a(href='/movies') Movies
+      li(ng-class='{ active:isActive(\'/import\')}', ng-if='isAuthenticated()')
+        a(href='/import') Import
 
 
 

@@ -15,7 +15,7 @@ describe('command/src/router', function() {
 
 
   it('should build an import action', function(done) {
-    routerFactory.create(getArgv('nodejs movviz --cmd import -s \'/tmp/test.csv\''))
+    routerFactory.create(getArgv('nodejs movviz --cmd import -s \'/tmp/test.csv\' --user=123456'))
       .get(function(err, obj) {
         if(err) {
           throw err;

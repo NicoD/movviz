@@ -5,9 +5,9 @@
     .module('movvizApp')
     .controller('MovieListController', MovieListController);
 
-  MovieListController.$inject = ['$scope', '$http', '$routeParams', '$filter', 'paginatorFactory'];
+  MovieListController.$inject = ['$scope', '$http', '$routeParams', '$filter', 'mzPaginationFactory'];
 
-  function MovieListController($scope, $http, $routeParams, $filter, paginatorFactory) {
+  function MovieListController($scope, $http, $routeParams, $filter, mzPaginationFactory) {
 
     var self = this;
     var page = parseInt($routeParams.page, 10);
@@ -23,7 +23,7 @@
     }
 
     // set the paginator
-    $scope.paginator = paginatorFactory.create(function(page) {
+    $scope.pagination = mzPaginationFactory.create(function(page) {
       page = page || 1;
       var target = '/movies/';
       if($scope.searchPattern) {
@@ -46,8 +46,8 @@
     $http.get(apiUrl)
       .success(function(data, status, headers, config) {
         $scope.movies = data.movies;
-        $scope.paginator.currentPage = data.pagination.currentPage;
-        $scope.paginator.totalPages = data.pagination.totalPages;
+        $scope.pagination.currentPage = data.pagination.currentPage;
+        $scope.pagination.totalPages = data.pagination.totalPages;
       })
       .error(function(data, status, headers, config) {
         console.log('error');
@@ -64,7 +64,7 @@
       // current search. This is used to prevent navigation from using the search
       // pattern if it has not been submited
       $scope.searchPattern = $scope.searchPatternForm;
-      $scope.paginator.goto();
+      $scope.pagination.goto();
     };
 
     $scope.$on('$viewContentLoaded', function() {

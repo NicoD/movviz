@@ -7,7 +7,7 @@ module.exports = function(app) {
 
   app.use('/public', express.static(path.join(__dirname, '../public')));
   // only for dev purpose (sourceMap);
-  app.use('/app', express.static(path.join(__dirname, 'client')));
+  app.use('/client', express.static(path.join(__dirname, '../client')));
 
   // partial view may be rendered through jade
   app.get('/partial/:name?', function(req, res) {

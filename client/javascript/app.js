@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('movvizApp', ['ngRoute', 'satellizer'])
+  angular.module('movvizApp', ['ngRoute', 'satellizer', 'ui.bootstrap'])
 
   .config(['$locationProvider',
     function($locationProvider) {

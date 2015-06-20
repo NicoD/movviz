@@ -18,12 +18,26 @@
 @listbackground: #FFF;
 @pagebackground: @color3;
 
-
+//color from bootstrap
+@error: #a94442;
+@success: #3c763d;
 
 body {
   margin-top:80px;
   background-color: @pagebackground;
   background-image: url('http://www.transparenttextures.com/patterns/bright-squares.png');
+}
+
+
+.glyphicon {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: 400;
+  font-height: 100px;
+  .font-smoothing();
 }
 
 
@@ -54,6 +68,20 @@ nav.navbar {
     }
   }
 }
+
+div.main {
+  padding-top: 10px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 40px;
+  height: 100%;
+  border: 1px solid @listborder;
+  background-color: @listbackground;
+  .box-shadow(3px 2px 0px 0px @listborder);
+  .border-radius(5px);
+  color: @listtext;
+}
+
 
 @media (min-width: 768px) {
   .navbar-toggle-no-style {
@@ -118,4 +146,48 @@ div.customlist {
     color: @listtitle; 
     text-align:center;
   }
+}
+
+
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  max-width: 100%;
+  min-height: 100%;
+  text-align: right;
+  display:block;
+  opacity: 0;
+}
+
+.import {
+  div.progressbar {
+    margin-top: 30px;
+  }
+
+  div.results {
+    th.error {
+      color: @error;
+    }
+
+    th.inserted, th.updated {
+      color: @success;
+    }
+  }
+}
+
+
+.glyphicon.spinning {
+  animation: spin 1s infinite linear;
+  -webkit-animation: spin2 1s infinite linear;
+}
+
+@keyframes spin {
+  from { transform: scale(1) rotate(0deg);}
+  to { transform: scale(1) rotate(360deg);}
+}
+
+@-webkit-keyframes spin2 {
+  from { -webkit-transform: rotate(0deg);}
+  to { -webkit-transform: rotate(360deg);}
 }

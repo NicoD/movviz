@@ -9,16 +9,16 @@
     var $httpBackend;
     var $location;
     var $filter;
-    var paginatorFactory;
+    var mzPaginationFactory;
 
     var $scope;
 
-    beforeEach(inject(function(_$controller_, _$httpBackend_, _$location_, _$filter_, _paginatorFactory_) {
+    beforeEach(inject(function(_$controller_, _$httpBackend_, _$location_, _$filter_, _mzPaginationFactory_) {
       $controller = _$controller_;
       $httpBackend = _$httpBackend_;
       $location = _$location_;
       $filter = _$filter_;
-      paginatorFactory = _paginatorFactory_;
+      mzPaginationFactory = _mzPaginationFactory_;
 
       // location mock object
       $location.path = function(p) {
@@ -44,10 +44,10 @@
         $controller('MovieListController', {
           $scope: $scope,
           $routeParams: {},
-          paginatorFactory: paginatorFactory
+          mzPaginationFactory: mzPaginationFactory
         });
         $httpBackend.flush();
-        expect($scope.paginator.currentPage).to.be.equals(0);
+        expect($scope.pagination.currentPage).to.be.equals(0);
 
         $httpBackend.whenGET('/api/movies/4').respond({
           pagination:  {
@@ -59,10 +59,10 @@
           $routeParams: {
             page: 5
           },
-          paginatoryFactory: paginatorFactory
+          mzPaginationFactory: mzPaginationFactory
         });
         $httpBackend.flush();
-        expect($scope.paginator.currentPage).to.be.equals(5);
+        expect($scope.pagination.currentPage).to.be.equals(5);
       });
 
 
@@ -78,10 +78,10 @@
             page: 20,
             search: 'Hey Hey My My'
           },
-          paginatorFactory: paginatorFactory
+          mzPaginationFactory: mzPaginationFactory
         });
         $httpBackend.flush();
-        $scope.paginator.goto(18);
+        $scope.pagination.goto(18);
         expect($location.path()).to.be.equals('/movies/Hey%20Hey%20My%20My/18');
         // set a new search string
         $scope.searchPatternForm = 'Rock\'n\'Roll Will Never Die';

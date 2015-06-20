@@ -1,5 +1,7 @@
 'use strict';
 
+var mongoose = require('mongoose');
+
 /* global emit */
 
 
@@ -7,7 +9,7 @@ var aggregation = {
   'directors': {
     'type': 'map-reduce',
     'description': 'general aggregation per directors',
-    'mapReduce': function(MovieModel, callback) {
+    'mapReduce': function(userId, MovieModel, callback) {
       var tmpCollectionName = 'tmp_director';
       MovieModel.mapReduce({
           map: function() {
@@ -34,7 +36,9 @@ var aggregation = {
             }
             return reducedVal;
           },
-          query: {},
+          query: {
+            user: mongoose.Types.ObjectId(userId)
+          },
           out: tmpCollectionName,
           finalize: function(key, reducedVal) {
             reducedVal.avg = reducedVal.total / reducedVal.count;
@@ -67,7 +71,7 @@ var aggregation = {
   'periods': {
     'type': 'map-reduce',
     'description': 'general aggregation per period',
-    'mapReduce': function(MovieModel, callback) {
+    'mapReduce': function(userId, MovieModel, callback) {
       var tmpCollectionName = 'tmp_period';
       MovieModel.mapReduce({
           map: function() {
@@ -92,7 +96,9 @@ var aggregation = {
             }
             return reducedVal;
           },
-          query: {},
+          query: {
+            user: mongoose.Types.ObjectId(userId)
+          },
           out: tmpCollectionName,
           finalize: function(key, reducedVal) {
             reducedVal.avg = reducedVal.total / reducedVal.count;

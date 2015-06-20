@@ -1,7 +1,9 @@
 'use strict';
 
 var userModelFactory = require('../model/user'),
+  customlistModelFactory = require('../model/customlist'),
   mydb = require('../db'),
+  authMiddleware = require('../middleware/auth.js'),
   request = require('request'),
   jwt = require('jwt-simple'),
   path = require('path'),
@@ -29,58 +31,18 @@ function createJWT(user, token) {
 module.exports = function(app) {
 
 
-  app.get('/api/profile', ensureAuthenticated, function(req, res) {
+  app.get('/api/profile', authMiddleware, function(req, res) {
     mydb.connect(function(err, conn) {
       if(err) {
         throw err;
       }
       var UserModel = userModelFactory.create(conn);
       UserModel.findById(req.user, function(err, user) {
-        console.log(req);
         res.send(user);
       });
     });
 
   });
-
-
-  /*
-   * login required middleware
-   */
-  function ensureAuthenticated(req, res, next) {
-
-    var configFile = path.dirname(require.main.filename) + '/config/auth.yaml';
-    fs.readFile(configFile, function(err, data) {
-      if(err) {
-        throw err;
-      }
-      var config = yaml.safeLoad(data);
-      if(!req.headers.authorization) {
-        return res.status(401).send({
-          message: 'Please make sure your request has an Authorization header'
-        });
-      }
-      var token = req.headers.authorization.split(' ')[1];
-
-      var payload = null;
-      try {
-        payload = jwt.decode(token, config.TOKEN_SECRET);
-      } catch(e) {
-        return res.status(401).send({
-          message: e.message
-        });
-      }
-
-      if(payload.exp <= moment().unix()) {
-        return res.status(401).send({
-          message: 'Token has expired'
-        });
-      }
-      req.user = payload.sub;
-      next();
-    });
-  }
-
 
 
   var configFile = path.dirname(require.main.filename) + '/config/auth.yaml';
@@ -174,10 +136,16 @@ module.exports = function(app) {
                 user.picture = profile.picture.replace('sz=50', 'sz=40');
                 user.displayName = profile.name;
 
-                user.save(function(err) {
-                  var token = createJWT(user, config.TOKEN_SECRET);
-                  res.send({
-                    token: token
+                user.save(function(err, savedUser) {
+                  if(err) {
+                    throw err;
+                  }
+                  // create the default lists
+                  customlistModelFactory.install(conn, savedUser._id, function(err) {
+                    var token = createJWT(user, config.TOKEN_SECRET);
+                    res.send({
+                      token: token
+                    });
                   });
                 });
               });
