@@ -7,26 +7,37 @@
 
   ImportController.$inject = ['$scope', '$location', '$auth', 'FileUpload'];
 
+
+  /**
+   * status are
+   *   [init]  => [uploading] => [processing] => [done]
+   *     |             |               |           |
+   *     |             |               |           |
+   *  default      progress bar     spinner     results
+   */
   function ImportController($scope, $location, $auth, FileUpload) {
     if(!$auth.isAuthenticated()) {
       $location.path('/');
       return;
     }
+    $scope.status = 'init';
 
     $scope.dynamic = 0;
     $scope.submit = function() {
       var self = this;
-      this.started = true;
+      this.status = 'uploading';
       FileUpload.upload({
         url: 'api/import',
         file: this.csvFile
       }).progress(function(evt) {
         self.dynamic = parseInt(100.0 * evt.loaded / evt.total);
-        console.log('progress ' + self.dynamic + '%' + evt.config.file.name);
+        if(self.dynamic === 100) {
+          self.status = 'processing';
+        }
       }).success(function(data, status, headers, config) {
-        console.log('file ' + config.file.name + 'uploaded. Response ' + data);
+        self.stats = data;
+        self.status = 'done';
       });
     };
-    $scope.started = false;
   }
 }());

@@ -4,12 +4,28 @@
     <div class="import"> 
       <form enctype="multipart/form-data" method="post" ng-submit="submit()">
         <div class="form-group">
-          <upload file-model="csvFile" progress-model="dynamic" started-model="started"/>
+          <upload file-model="csvFile" progress-model="dynamic" status-model="started"/>
           
-          <div class="progressbar" ng-if="started === true">
-            <progressbar value="dynamic"><span style="color:black; white-space:nowrap;">{{dynamic}}%</span></progressbar>
+          <div class="progressbar" ng-if="status!='init'">
+            <progressbar value="dynamic" ng-class="{'active': status=='processing', 'progress-striped': status!='done'}">
+              <span ng-if="status=='processing'">  
+                <span class="glyphicon glyphicon-refresh spinning"></span> <span style="color:black; white-space:nowrap;">Processing ...</span>
+              </span>
+              <span ng-if="status=='uploading'" style="color:black; white-space:nowrap;">{{dynamic}}%</span>
+              <span ng-if="status=='done'" style="color:black; white-space:nowrap;">Complete</span>
+            </progressbar>
           </div>
         </div>
       </form>
+      <div class="results" ng-if="status=='done'">
+        <table class="table table-bordered">
+          <tbody>
+            <tr ng-repeat="(stat, value) in stats">
+              <th scope="row" class="{{stat}}">{{stat}}</th>
+              <td>{{value}}</td>
+            <tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>

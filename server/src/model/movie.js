@@ -23,7 +23,7 @@ var GenreSchema = new Schema({
 
 var RatingType = {
   type: Number,
-  min: 0,
+  min: -1,
   max: 10
 };
 var MovieSchema = new Schema({
@@ -49,7 +49,7 @@ var MovieSchema = new Schema({
   rating: RatingType,
   runtime: {
     type: Number,
-    min: 1,
+    min: -1,
     max: 1440
   },
   year: {
@@ -72,7 +72,7 @@ var MovieSchema = new Schema({
     rating: RatingType,
     updated_at: {
       type: Date,
-      defaumt: Date.now
+      default: Date.now
     }
   }
 }, {
@@ -80,12 +80,17 @@ var MovieSchema = new Schema({
 });
 
 // not a perfect "uniqueness" of a movie, but a conflit management will be set up for that
-MovieSchema.index({ user: 1, slug: 1}, { unique: true });
+MovieSchema.index({
+  user: 1,
+  slug: 1
+}, {
+  unique: true
+});
 
 // save preprocessing
 // apply slug and basic string/number transformation
 MovieSchema.pre('save', function(next) {
-  this.slug = this.year + '-' + StringUtil.slugify(this.title);
+  this.slug = getMovieSlug(this);
   this.title_order = StringUtil.orderify(this.title);
 
   var i;
@@ -103,6 +108,15 @@ MovieSchema.pre('save', function(next) {
   this.imdb.rating = Math.round(this.imdb.rating * 100) / 100;
   next();
 });
+
+/**
+ * return the slug of a movie
+ * @param {Object}
+ * @return {string}
+ */
+function getMovieSlug(movie) {
+  return movie.year + '-' + StringUtil.slugify(movie.title);
+}
 
 
 /**
@@ -186,11 +200,22 @@ MovieSchema.statics.getAggregatedResults = function(customlist, pagination, cb) 
 };
 
 
-/**
- * Movie model factory
- * @param {Object}
- * @return {Object}
- */
-module.exports.create = function(conn) {
-  return conn.model('Movie', MovieSchema);
+module.exports = {
+
+  /**
+   * return the slug value of a movie
+   * used to be able to get the key of a movie that is not inserted yet
+   * @param {Object}
+   * @return {string}
+   */
+  getMovieSlug: getMovieSlug,
+
+  /**
+   * Movie model factory
+   * @param {Object}
+   * @return {Object}
+   */
+  create: function(conn) {
+    return conn.model('Movie', MovieSchema);
+  }
 };

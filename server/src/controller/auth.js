@@ -1,7 +1,7 @@
 'use strict';
 
 var userModelFactory = require('../model/user'),
-    customlistModelFactory = require('../model/customlist'),
+  customlistModelFactory = require('../model/customlist'),
   mydb = require('../db'),
   authMiddleware = require('../middleware/auth.js'),
   request = require('request'),
@@ -137,7 +137,9 @@ module.exports = function(app) {
                 user.displayName = profile.name;
 
                 user.save(function(err, savedUser) {
-                  if(err) { throw err; }
+                  if(err) {
+                    throw err;
+                  }
                   // create the default lists
                   customlistModelFactory.install(conn, savedUser._id, function(err) {
                     var token = createJWT(user, config.TOKEN_SECRET);

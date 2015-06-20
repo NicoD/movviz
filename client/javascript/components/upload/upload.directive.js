@@ -24,8 +24,9 @@
           if(attrs.progressModel) { // reset the progress
             $parse(attrs.progressModel).assign($scope, 0);
           }
-          if(attrs.startedModel) {
-            $parse(attrs.startedModel).assign($scope, false);
+          if(attrs.statusModel) {
+            // just in case
+            $parse(attrs.statusModel).assign($scope, 'init');
           }
           var fileCaptionDiv = element[0].getElementsByClassName('file-caption-name')[0];
           if(fileCaptionDiv) {

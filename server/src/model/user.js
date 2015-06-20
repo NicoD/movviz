@@ -17,7 +17,9 @@ var UserSchema = new Schema({
   displayName: String,
   picture: String,
   google: String
-}, {collection: 'user' });
+}, {
+  collection: 'user'
+});
 
 
 /**

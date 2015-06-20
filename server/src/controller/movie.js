@@ -23,7 +23,7 @@ module.exports = function(app) {
 
       var importAction = importActionFactory.create(req.user, file.path, movieModelFactory.create(conn));
       importAction.on('process-done', function() {
-        res.send({status: 'OK'});
+        res.send(this.stats);
       });
       importAction.process();
     });

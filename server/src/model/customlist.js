@@ -32,7 +32,12 @@ var CustomlistSchema = new Schema({
   collection: 'customlist'
 });
 
-CustomlistSchema.index({ user: 1, slug: 1}, { unique: true });
+CustomlistSchema.index({
+  user: 1,
+  slug: 1
+}, {
+  unique: true
+});
 
 CustomlistSchema.pre('save', function(next) {
   this.slug = StringUtil.slugify(this.name);
