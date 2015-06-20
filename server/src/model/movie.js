@@ -27,6 +27,11 @@ var RatingType = {
   max: 10
 };
 var MovieSchema = new Schema({
+  user: {
+    type: Schema.ObjectId,
+    ref: 'UserSchema',
+    index: true
+  },
   slug: {
     type: String,
     index: true
@@ -74,11 +79,13 @@ var MovieSchema = new Schema({
   collection: 'movie'
 });
 
+// not a perfect "uniqueness" of a movie, but a conflit management will be set up for that
+MovieSchema.index({ user: 1, slug: 1}, { unique: true });
 
 // save preprocessing
 // apply slug and basic string/number transformation
 MovieSchema.pre('save', function(next) {
-  this.slug = StringUtil.slugify(this.title);
+  this.slug = this.year + '-' + StringUtil.slugify(this.title);
   this.title_order = StringUtil.orderify(this.title);
 
   var i;
@@ -146,7 +153,7 @@ MovieSchema.statics.getAggregatedResults = function(customlist, pagination, cb) 
 
   switch(rule.type) {
     case 'map-reduce':
-      rule.mapReduce(this, function(err, ResultModel) {
+      rule.mapReduce(customlist.user.valueOf(), this, function(err, ResultModel) {
         if(err) {
           return cb(err);
         }

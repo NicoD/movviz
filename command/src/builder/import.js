@@ -19,11 +19,15 @@ exports.create = function(conn, program, cb) {
   if(!program.source) {
     return cb("source not set");
   }
+  if(!program.user) {
+    return cb("user not set");
+  }
 
+  // @TODO check that the user exists in db
   fileUtil.prepare(program.source, function(err, uri) {
     if(err) {
       return cb(err);
     }
-    cb(null, actionFactory.create(uri, movieModelFactory.create(conn)));
+    cb(null, actionFactory.create(program.user, uri, movieModelFactory.create(conn)));
   });
 };

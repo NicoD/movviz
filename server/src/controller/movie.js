@@ -21,7 +21,7 @@ module.exports = function(app) {
     var file = req.files.file;
     mydb.connect(function(err, conn) {
 
-      var importAction = importActionFactory.create(file.path, movieModelFactory.create(conn));
+      var importAction = importActionFactory.create(req.user, file.path, movieModelFactory.create(conn));
       importAction.on('process-done', function() {
         res.send({status: 'OK'});
       });

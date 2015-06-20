@@ -4,7 +4,8 @@
  */
 'use strict';
 
-var fs = require('fs'),
+var mongoose = require('mongoose'),
+    fs = require('fs'),
   csv = require('fast-csv'),
   events = require('events'),
   util = require('util'),
@@ -14,10 +15,11 @@ var fs = require('fs'),
   /**
    * import movie from a source into a repository
    * @class
+   * @param {string} userId
    * @param {string} filePath - path of the file
    * @param {Object} MovieModel 
    */
-  ImportAction = function(filePath, MovieModel) {
+  ImportAction = function(userId, filePath, MovieModel) {
 
 
     var self = this;
@@ -32,6 +34,7 @@ var fs = require('fs'),
     var cleanRawResult = function(data) {
       /*jshint -W069 */
       var res = {
+        user: mongoose.Types.ObjectId(userId),
         title: data['Title'],
         watched_at: Date.parse(data['created']),
         genres: [],
@@ -130,9 +133,10 @@ util.inherits(ImportAction, events.EventEmitter);
 
 /** 
  * ImportAction factory
+ * @param {string} userid
  * @param {string} filePath
  * @param {Object} MovieModel
  */
-module.exports.create = function(filePath, MovieModel) {
-  return new ImportAction(filePath, MovieModel);
+module.exports.create = function(userId, filePath, MovieModel) {
+  return new ImportAction(userId, filePath, MovieModel);
 };

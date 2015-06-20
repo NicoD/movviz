@@ -26,6 +26,7 @@ var CommandRouter = function(argv) {
     .option('-c, --cmd [cmd]', 'Command', /^(import|list|install)$/i)
     .option('-s, --source [source]', 'source (url or path) [import]}')
     .option('-v, --verbose', 'verbose mode')
+    .option('--user', 'user id [import[install]')
     .option('-l, --lines [value]', 'Line number to display per page [list]', parseInt)
     .option('--criteria [value]', 'search criteria [list]')
     .option('--modules [value]', 'comma separated modules  [install]');
@@ -34,7 +35,7 @@ var CommandRouter = function(argv) {
   program.on('--help', function() {
     console.log('  Examples:');
     console.log('');
-    console.log('    $ nodejs movviz.js --cmd=import --source=/tmp/file.csv');
+    console.log('    $ nodejs movviz.js --cmd=import --source=/tmp/file.csv --user=584123654785211');
     console.log('    $ nodejs movviz.js --cmd=list -v');
     console.log('    $ nodejs movviz.js --cmd=install --modules=customlist');
     console.log('    $ nodejs movviz.js --cmd list -v -l 1000 --criteria search');
